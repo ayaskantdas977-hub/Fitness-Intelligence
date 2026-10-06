@@ -1,3 +1,6 @@
+/**
+ * Represents a certified fitness instructor or biomechanics clinician.
+ */
 export interface CourseInstructor {
   name: string;
   role: string;
@@ -10,6 +13,9 @@ export interface CourseInstructor {
   officeHours: string;
 }
 
+/**
+ * Represents an individual curriculum module with structured lessons.
+ */
 export interface CourseCurriculumModule {
   moduleTitle: string;
   duration: string;
@@ -21,6 +27,9 @@ export interface CourseCurriculumModule {
   }[];
 }
 
+/**
+ * Represents an educational course in the academy marketplace.
+ */
 export interface Course {
   id: string;
   title: string;
@@ -48,6 +57,9 @@ export interface Course {
   bestFor: string;
 }
 
+/**
+ * Master catalog of all available fitness, biomechanics, and nutrition courses.
+ */
 export const COURSES_CATALOG: Course[] = [
   {
     id: 'course-gym-beginner-zero-to-hero',
