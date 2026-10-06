@@ -40,28 +40,46 @@ describe('Clinical Safety & Evidence-Based Research Engine', () => {
   });
 
   describe('extractMedicalKeywordsFromText', () => {
-    it('detects lumbar spine and disc herniation terminology', () => {
-      const sampleMriReport = 'Patient presents with L4-L5 disc bulge causing lumbar pain and mild sciatica.';
+    it('detects lumbar spine and disc herniation terminology with contraindications and substitutions', () => {
+      const sampleMriReport =
+        'Patient presents with L4-L5 disc bulge causing lumbar pain and mild sciatica. Avoid axial spinal loading.';
       const res = extractMedicalKeywordsFromText(sampleMriReport);
 
       expect(res.detectedInjuryAreas).toContain('lower_back');
-      expect(res.detectedConditions.some((c) => c.toLowerCase().includes('spine'))).toBe(true);
+      expect(res.detectedConditions.some((c) => c.toLowerCase().includes('spine') || c.toLowerCase().includes('disc'))).toBe(true);
+      expect(res.overallTier).toBe('amber');
+      expect(res.contraindications.some((c) => c.exercise.includes('Squat'))).toBe(true);
+      expect(res.safeSubstitutions.some((s) => s.safeReplacement.includes('Leg Press'))).toBe(true);
+      expect(res.clinicalExcerpts.length).toBeGreaterThan(0);
+      expect(res.recommendedSplit).toContain('Spine-Spared');
     });
 
-    it('detects knee meniscus and patellar wear', () => {
-      const sampleText = 'Right knee lateral meniscus tear noted on diagnostic scan.';
+    it('detects knee meniscus and patellar wear with biomechanical substitutions', () => {
+      const sampleText = 'Right knee lateral meniscus tear and patellofemoral wear noted on diagnostic scan.';
       const res = extractMedicalKeywordsFromText(sampleText);
 
       expect(res.detectedInjuryAreas).toContain('knee');
       expect(res.detectedConditions.some((c) => c.toLowerCase().includes('knee'))).toBe(true);
+      expect(res.contraindications.some((c) => c.exercise.includes('Squat') || c.exercise.includes('Lunges'))).toBe(true);
+      expect(res.safeSubstitutions.some((s) => s.safeReplacement.includes('Leg Press') || s.safeReplacement.includes('Romanian'))).toBe(true);
     });
 
-    it('detects shoulder impingement and rotator cuff limitations', () => {
+    it('detects shoulder impingement and rotator cuff limitations with scapular plane recommendations', () => {
       const sampleText = 'Subacromial impingement with supraspinatus rotator cuff tendinopathy.';
       const res = extractMedicalKeywordsFromText(sampleText);
 
       expect(res.detectedInjuryAreas).toContain('shoulder');
       expect(res.detectedConditions.some((c) => c.toLowerCase().includes('shoulder'))).toBe(true);
+      expect(res.contraindications.some((c) => c.exercise.includes('Behind-The-Neck') || c.exercise.includes('Upright'))).toBe(true);
+      expect(res.safeSubstitutions.some((s) => s.safeReplacement.includes('Neutral-Grip') || s.safeReplacement.includes('Face Pull'))).toBe(true);
+    });
+
+    it('detects cardiovascular and blood pressure restrictions', () => {
+      const sampleText = 'Patient diagnosed with hypertension and elevated blood pressure.';
+      const res = extractMedicalKeywordsFromText(sampleText);
+
+      expect(res.detectedConditions.some((c) => c.toLowerCase().includes('blood pressure') || c.toLowerCase().includes('cardio'))).toBe(true);
+      expect(res.contraindications.some((c) => c.exercise.includes('Valsalva'))).toBe(true);
     });
   });
 

@@ -24,6 +24,11 @@ export interface MedicalReportData {
   notes?: string;
   detectedKeywords?: string[];
   summarySnippet?: string;
+  overallTier?: SafetyTier;
+  contraindications?: { exercise: string; reason: string }[];
+  safeSubstitutions?: { original: string; safeReplacement: string; reason: string }[];
+  recommendedSplit?: string;
+  clinicalExcerpts?: string[];
 }
 
 export interface ClinicalResearchFinding {

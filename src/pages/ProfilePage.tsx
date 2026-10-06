@@ -16,6 +16,7 @@ import { Button } from '../components/ui/Button';
 import { Chip } from '../components/ui/Chip';
 import { Modal } from '../components/ui/Modal';
 import { Skeleton } from '../components/ui/Skeleton';
+import { MedicalReportUploader } from '../components/ui/MedicalReportUploader';
 import { useWhyDrawer } from '../context/WhyDrawerContext';
 import { useToast } from '../context/ToastContext';
 import { services } from '../services/registry';
@@ -420,6 +421,15 @@ export const ProfilePage: React.FC = () => {
                 {currentSafety.tier === 'red' &&
                   'Active medical precautions flagged. Training routines are locked until cleared by a physician.'}
               </p>
+              {profile.safetyResponses.uploadedReport && (
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#FF6B1A]/10 text-[#EA580C] dark:text-[#FFB547] border border-[#FF6B1A]/20 text-[11px] font-semibold">
+                    <span>📄</span>
+                    <span className="truncate max-w-[200px]">{profile.safetyResponses.uploadedReport.fileName}</span>
+                    <span className="text-emerald-500 font-bold">✓ Parsed</span>
+                  </span>
+                </div>
+              )}
             </div>
           </div>
 
@@ -1051,6 +1061,34 @@ export const ProfilePage: React.FC = () => {
                 </span>
               </div>
             </label>
+          </div>
+
+          {/* Medical Report / Prescription Uploader */}
+          <div className="pt-3 border-t border-[var(--border)]">
+            <span className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] block mb-2">
+              Clinical Medical Report or MRI Summary:
+            </span>
+            <MedicalReportUploader
+              uploadedReport={safetyDraft.uploadedReport}
+              onReportChange={(rep) =>
+                setSafetyDraft((prev) => ({ ...prev, uploadedReport: rep }))
+              }
+              onKeywordsDetected={(conditions, injuryAreas) => {
+                setSafetyDraft((prev) => {
+                  const currentInjuries = prev.injuryAreas || [];
+                  const mergedInjuries = Array.from(new Set([...currentInjuries, ...injuryAreas]));
+                  const currentConditions = prev.medicalConditions || [];
+                  const mergedConditions = Array.from(new Set([...currentConditions, ...conditions]));
+                  return {
+                    ...prev,
+                    injuryOrPain: mergedInjuries.length > 0 || prev.injuryOrPain,
+                    injuryAreas: mergedInjuries,
+                    medicalConditions: mergedConditions,
+                  };
+                });
+                showToast('Medical report analyzed. Safety rules updated.', 'info');
+              }}
+            />
           </div>
 
           {/* Realtime Safety Preview */}

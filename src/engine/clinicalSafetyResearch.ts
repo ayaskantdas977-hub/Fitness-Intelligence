@@ -33,17 +33,29 @@ export const VETTED_RESEARCH_RESOURCES = {
   },
 };
 
-/**
- * Extracts and maps medical keywords from user notes or uploaded medical reports.
- */
-export function extractMedicalKeywordsFromText(rawText: string): {
+export interface ClinicalExtractionResult {
   detectedConditions: string[];
   detectedInjuryAreas: ('knee' | 'shoulder' | 'lower_back' | 'wrist' | 'ankle' | 'neck')[];
   suggestedNotes: string;
-} {
+  contraindications: { exercise: string; reason: string }[];
+  safeSubstitutions: { original: string; safeReplacement: string; reason: string }[];
+  overallTier: SafetyTier;
+  recommendedSplit: string;
+  clinicalExcerpts: string[];
+}
+
+/**
+ * Extracts and maps medical keywords from user notes or uploaded medical reports.
+ * Performs deep clinical and biomechanical rule evaluation based on CDC & ACSM protocols.
+ */
+export function extractMedicalKeywordsFromText(rawText: string): ClinicalExtractionResult {
   const text = rawText.toLowerCase();
   const detectedConditions: string[] = [];
   const detectedInjuryAreas: ('knee' | 'shoulder' | 'lower_back' | 'wrist' | 'ankle' | 'neck')[] = [];
+  const contraindications: { exercise: string; reason: string }[] = [];
+  const safeSubstitutions: { original: string; safeReplacement: string; reason: string }[] = [];
+  let overallTier: SafetyTier = 'green';
+  let recommendedSplit = 'Full Compound Progressive Overload (Push / Pull / Legs)';
 
   // Lower Back & Spine Keywords
   if (
@@ -56,10 +68,55 @@ export function extractMedicalKeywordsFromText(rawText: string): {
     text.includes('disc') ||
     text.includes('lumbar') ||
     text.includes('lower back') ||
-    text.includes('spondyl')
+    text.includes('spondyl') ||
+    text.includes('stenosis') ||
+    text.includes('annular') ||
+    text.includes('sacroiliac')
   ) {
-    detectedConditions.push('Lumbar Spine / Lower Back Limitation');
+    detectedConditions.push('Lumbar Spine / Disc Mechanical Vulnerability');
     if (!detectedInjuryAreas.includes('lower_back')) detectedInjuryAreas.push('lower_back');
+    overallTier = 'amber';
+    recommendedSplit = 'Spine-Spared 4-Day Upper / Lower (Zero Axial Compression)';
+    contraindications.push(
+      {
+        exercise: 'Barbell Back Squat',
+        reason: 'Compressive vertical axial load exceeds tolerance of healing lumbar disc annulus.',
+      },
+      {
+        exercise: 'Standing Barbell Overhead Military Press',
+        reason: 'Exaggerates lumbar lordosis and hyperextension shear under axial loading.',
+      },
+      {
+        exercise: 'Conventional Floor Deadlift',
+        reason: 'High lumbar flexion moment arm during initial break off the floor.',
+      },
+      {
+        exercise: 'Standing Bent-Over Barbell Row',
+        reason: 'Sustained isometric shear on erector spinae and posterior disc wall.',
+      }
+    );
+    safeSubstitutions.push(
+      {
+        original: 'Barbell Back Squat',
+        safeReplacement: 'Seated Horizontal Leg Press / Goblet Squat',
+        reason: 'Back pad absorbs compressive load; maintains quad hypertrophy with 0 axial shear.',
+      },
+      {
+        original: 'Standing Overhead Press',
+        safeReplacement: 'Seated Incline Neutral-Grip Dumbbell Press',
+        reason: 'Thoracic support pad eliminates lumbar hyperextension stress.',
+      },
+      {
+        original: 'Bent-Over Barbell Row',
+        safeReplacement: 'Chest-Supported Machine / Incline Dumbbell Row',
+        reason: 'Isolates lats and rhomboids with zero lumbar shear force.',
+      },
+      {
+        original: 'Conventional Floor Deadlift',
+        safeReplacement: 'Barbell / Dumbbell Hip Thrust (Glute Bridge)',
+        reason: 'Isolates posterior chain glute drive without spinal axial compression.',
+      }
+    );
   }
 
   // Knee Keywords
@@ -69,11 +126,48 @@ export function extractMedicalKeywordsFromText(rawText: string): {
     text.includes('meniscus') ||
     text.includes('acl') ||
     text.includes('mcl') ||
+    text.includes('pcl') ||
     text.includes('chondromalacia') ||
-    text.includes('runner')
+    text.includes('runner') ||
+    text.includes('patellar')
   ) {
-    detectedConditions.push('Knee / Patellofemoral Joint Limitation');
+    detectedConditions.push('Knee / Patellofemoral & Meniscal Sensitivity');
     if (!detectedInjuryAreas.includes('knee')) detectedInjuryAreas.push('knee');
+    if (overallTier === 'green') overallTier = 'amber';
+    if (recommendedSplit.startsWith('Full Compound')) {
+      recommendedSplit = 'Low-Impact Joint-Preservation Split (Controlled Knee Angles)';
+    }
+    contraindications.push(
+      {
+        exercise: 'Deep Knee Squats (>100° flexion)',
+        reason: 'Generates peak patellofemoral compressive force and meniscus horn pinching.',
+      },
+      {
+        exercise: 'Walking Lunges with Forward Knee Drift',
+        reason: 'High deceleration shear across patellar tendon and anterior cruciate ligament.',
+      },
+      {
+        exercise: 'High-Impact Box Jumps / Plyometrics',
+        reason: 'Ballistic landing forces degrade articular cartilage.',
+      }
+    );
+    safeSubstitutions.push(
+      {
+        original: 'Walking Lunges',
+        safeReplacement: 'Romanian Deadlift (Hip Hinge Focus)',
+        reason: 'Shifts mechanical tension entirely to posterior chain with zero knee shear.',
+      },
+      {
+        original: 'Deep Barbell Squats',
+        safeReplacement: 'Horizontal Leg Press (90° Knee Buffer)',
+        reason: 'Provides stable footplate support and eliminates balance deceleration shear.',
+      },
+      {
+        original: 'Plyometric Box Jumps',
+        safeReplacement: 'Low-Impact Stationary Cycling & Glute Bridges',
+        reason: 'Maintains cardiovascular power without joint impact shock.',
+      }
+    );
   }
 
   // Shoulder Keywords
@@ -83,10 +177,106 @@ export function extractMedicalKeywordsFromText(rawText: string): {
     text.includes('impingement') ||
     text.includes('bursitis') ||
     text.includes('labrum') ||
-    text.includes('acromio')
+    text.includes('acromio') ||
+    text.includes('supraspinatus') ||
+    text.includes('subacromial') ||
+    text.includes('slap tear')
   ) {
-    detectedConditions.push('Shoulder / Rotator Cuff Impingement');
+    detectedConditions.push('Shoulder / Subacromial Impingement Vulnerability');
     if (!detectedInjuryAreas.includes('shoulder')) detectedInjuryAreas.push('shoulder');
+    if (overallTier === 'green') overallTier = 'amber';
+    if (recommendedSplit.startsWith('Full Compound')) {
+      recommendedSplit = 'Scapular-Plane Upper / Lower Split (Neutral Grip Focus)';
+    }
+    contraindications.push(
+      {
+        exercise: 'Behind-The-Neck Overhead Press',
+        reason: 'Forces extreme external rotation combined with subacromial space narrowing.',
+      },
+      {
+        exercise: 'Upright Barbell Rows',
+        reason: 'Internal humeral rotation under shoulder abduction impinges the supraspinatus tendon.',
+      },
+      {
+        exercise: 'Wide Flared-Elbow Barbell Bench Press',
+        reason: 'Severe hyperextension strain on anterior glenohumeral joint capsule.',
+      }
+    );
+    safeSubstitutions.push(
+      {
+        original: 'Wide Flared Barbell Bench Press',
+        safeReplacement: 'Neutral-Grip Dumbbell Floor / Incline Press (45° Elbow Tuck)',
+        reason: 'Spares anterior joint capsule and opens subacromial arch.',
+      },
+      {
+        original: 'Upright Barbell Row',
+        safeReplacement: 'Cable Face Pull with High External Rotation',
+        reason: 'Strengthens posterior rotator cuff stabilizers without subacromial impingement.',
+      },
+      {
+        original: 'Standing Barbell Press',
+        safeReplacement: 'Landmine Angled Press in Scapular Plane',
+        reason: 'Naturally guides humerus along the 30° scapular plane.',
+      }
+    );
+  }
+
+  // Neck / Cervical Spine
+  if (
+    text.includes('cervical') ||
+    text.includes('c4') ||
+    text.includes('c5') ||
+    text.includes('c6') ||
+    text.includes('c7') ||
+    text.includes('neck') ||
+    text.includes('whiplash')
+  ) {
+    detectedConditions.push('Cervical Spine / Neck Muscle Sensitivity');
+    if (!detectedInjuryAreas.includes('neck')) detectedInjuryAreas.push('neck');
+    if (overallTier === 'green') overallTier = 'amber';
+    contraindications.push({
+      exercise: 'Heavy Barbell Shrugs & Behind-The-Head Movements',
+      reason: 'Excessive compressive loading and hyperextension of cervical vertebrae.',
+    });
+    safeSubstitutions.push({
+      original: 'Heavy Barbell Shrugs',
+      safeReplacement: 'Scapular Wall Slides & Prone Y-Raises',
+      reason: 'Recruits lower traps and serratus anterior with neutral cervical alignment.',
+    });
+  }
+
+  // Wrist / Forearm
+  if (
+    text.includes('wrist') ||
+    text.includes('carpal') ||
+    text.includes('tfcc') ||
+    text.includes('scaphoid') ||
+    text.includes('tenosynovitis')
+  ) {
+    detectedConditions.push('Wrist / Carpal Joint Limitation');
+    if (!detectedInjuryAreas.includes('wrist')) detectedInjuryAreas.push('wrist');
+    if (overallTier === 'green') overallTier = 'amber';
+    contraindications.push({
+      exercise: 'Straight Barbell Bicep Curls & Clean Front Squats',
+      reason: 'Excessive wrist extension and ulnar deviation stress.',
+    });
+    safeSubstitutions.push({
+      original: 'Straight Barbell Curl',
+      safeReplacement: 'EZ-Bar or Neutral Hammer Dumbbell Curls',
+      reason: 'Semi-supinated grip relieves ulnar compression and carpal tunnel tension.',
+    });
+  }
+
+  // Ankle / Achilles
+  if (
+    text.includes('ankle') ||
+    text.includes('achilles') ||
+    text.includes('plantar') ||
+    text.includes('sprain')
+  ) {
+    detectedConditions.push('Ankle / Achilles Tendon Vulnerability');
+    if (!detectedInjuryAreas.includes('ankle')) detectedInjuryAreas.push('ankle');
+    if (overallTier === 'green') overallTier = 'amber';
   }
 
   // Cardiovascular & Hypertension Keywords
@@ -96,9 +286,34 @@ export function extractMedicalKeywordsFromText(rawText: string): {
     text.includes('high bp') ||
     text.includes('cardio') ||
     text.includes('arrhythmia') ||
-    text.includes('heart')
+    text.includes('heart') ||
+    text.includes('angina') ||
+    text.includes('tachycardia')
   ) {
-    detectedConditions.push('Cardiovascular / Elevated Blood Pressure');
+    detectedConditions.push('Cardiovascular / Elevated Blood Pressure (Valsalva Restriction)');
+    if (overallTier === 'green') overallTier = 'amber';
+    contraindications.push(
+      {
+        exercise: 'Maximal 1RM Heavy Straining (Valsalva Maneuver)',
+        reason: 'Breath-holding under maximal load triggers acute intra-thoracic blood pressure spikes.',
+      },
+      {
+        exercise: 'Heavy Inverted Leg Press',
+        reason: 'Inversion angle plus high intra-abdominal pressure increases cranial systolic load.',
+      }
+    );
+    safeSubstitutions.push(
+      {
+        original: 'Maximal 1RM Straining',
+        safeReplacement: 'Controlled Moderate 10-15 Rep Range (RPE 6-7)',
+        reason: 'Sustained muscular stimulus with continuous rhythmic open-glottis breathing.',
+      },
+      {
+        original: 'Heavy Inverted Press',
+        safeReplacement: 'Upright Seated Leg Press with Open Exhalation',
+        reason: 'Eliminates inverted head-down pressure spikes.',
+      }
+    );
   }
 
   // Respiratory Keywords
@@ -109,23 +324,72 @@ export function extractMedicalKeywordsFromText(rawText: string): {
     text.includes('bronch') ||
     text.includes('respiratory')
   ) {
-    detectedConditions.push('Respiratory / Asthmatic Consideration');
+    detectedConditions.push('Respiratory / Asthmatic Exercise Consideration');
+    if (overallTier === 'green') overallTier = 'amber';
   }
 
   // Joint / Arthritis Keywords
   if (text.includes('arthrit') || text.includes('osteo') || text.includes('rheumat')) {
     detectedConditions.push('Joint Arthropathy / Degenerative Changes');
+    if (overallTier === 'green') overallTier = 'amber';
+  }
+
+  // Severe Red Flag Exertional Symptoms or Uncleared Surgery
+  if (
+    text.includes('chest pain') ||
+    text.includes('syncope') ||
+    text.includes('fainting') ||
+    text.includes('dizziness during exertion') ||
+    text.includes('unstable angina')
+  ) {
+    detectedConditions.push('Acute Exertional Symptoms Requiring Physician Evaluation');
+    overallTier = 'red';
+    recommendedSplit = 'Clinical Rehabilitation / Physician-Supervised Protocol';
+    contraindications.unshift({
+      exercise: 'All Unsupervised Heavy Resistance Training',
+      reason: 'PAR-Q+ emergency protocol directs immediate clinical diagnostic clearance.',
+    });
   }
 
   // Recent Surgery
   if (text.includes('post-op') || text.includes('surgery') || text.includes('reconstruct') || text.includes('arthroscop')) {
     detectedConditions.push('Post-Operative Recovery Phase');
+    if (overallTier === 'green') overallTier = 'amber';
+  }
+
+  // Extract real clinical excerpts from the text
+  const clinicalExcerpts: string[] = [];
+  const triggerWords = [
+    'l4', 'l5', 's1', 'disc', 'spine', 'lumbar', 'herniat', 'bulge', 'stenosis',
+    'knee', 'patell', 'meniscus', 'acl', 'mcl', 'cartilage', 'joint',
+    'shoulder', 'rotator', 'impingement', 'bursitis', 'labrum',
+    'pressure', 'hypertens', 'heart', 'cardio', 'cervical', 'wrist', 'surgery'
+  ];
+
+  const sentences = rawText.split(/[.\n\r]+/).map((s) => s.trim()).filter((s) => s.length > 15);
+  for (const sentence of sentences) {
+    const sLower = sentence.toLowerCase();
+    if (triggerWords.some((tw) => sLower.includes(tw))) {
+      // Don't add duplicate or very similar excerpts
+      if (!clinicalExcerpts.some((e) => e.toLowerCase() === sentence.toLowerCase())) {
+        clinicalExcerpts.push(sentence.length > 180 ? `${sentence.slice(0, 180)}...` : sentence);
+      }
+    }
+    if (clinicalExcerpts.length >= 4) break;
   }
 
   return {
     detectedConditions,
     detectedInjuryAreas,
-    suggestedNotes: detectedConditions.length > 0 ? `Identified clinical markers: ${detectedConditions.join(', ')}` : '',
+    suggestedNotes:
+      detectedConditions.length > 0
+        ? `Identified clinical markers: ${detectedConditions.join(', ')}`
+        : 'General adult exercise profile: no critical contraindications identified.',
+    contraindications,
+    safeSubstitutions,
+    overallTier,
+    recommendedSplit,
+    clinicalExcerpts,
   };
 }
 
