@@ -16,6 +16,7 @@ import { FormCheckerPage } from './pages/FormCheckerPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { AuthPage } from './pages/AuthPage';
+import { CoursesPage } from './pages/CoursesPage';
 
 export function App() {
   return (
@@ -33,6 +34,7 @@ export function App() {
                   <Route path="/workout" element={<WorkoutPage />} />
                   <Route path="/nutrition" element={<NutritionPage />} />
                   <Route path="/form-checker" element={<FormCheckerPage />} />
+                  <Route path="/courses" element={<CoursesPage />} />
                   <Route path="/progress" element={<ProgressPage />} />
                   <Route path="/profile" element={<ProfilePage />} />
                   <Route path="/login" element={<AuthPage />} />

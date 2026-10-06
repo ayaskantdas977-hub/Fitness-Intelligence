@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, X, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, X, Zap, GraduationCap } from 'lucide-react';
 import { HeroMedia } from '../components/hero/HeroMedia';
 import { HeroWall } from '../components/landing/HeroWall';
 import { HeroArc } from '../components/landing/HeroArc';
@@ -119,6 +119,13 @@ export const LandingPage: React.FC = () => {
               <Zap className="w-3.5 h-3.5 fill-current" />
               Science Lab
             </button>
+            <Link
+              to="/courses"
+              className="text-[#EA580C] dark:text-[#FFB547] hover:text-[#FF6B1A] transition-colors font-bold cursor-pointer flex items-center gap-1"
+            >
+              <GraduationCap className="w-3.5 h-3.5 text-[#FF6B1A]" />
+              Courses
+            </Link>
             <a href="#story-scene" className="hover:text-[var(--text)] transition-colors">
               Principles
             </a>

@@ -9,6 +9,7 @@ import {
   Scan,
   LogOut,
   Zap,
+  GraduationCap,
 } from 'lucide-react';
 import { OfflineBanner } from '../ui/OfflineBanner';
 import { WhyDrawer } from '../drawers/WhyDrawer';
@@ -36,6 +37,7 @@ export const AppShell: React.FC = () => {
     { to: '/dashboard', label: 'Home', icon: LayoutDashboard },
     { to: '/workout', label: 'Workout', icon: Dumbbell },
     { to: '/form-checker', label: 'Form AI', icon: Scan },
+    { to: '/courses', label: 'Courses', icon: GraduationCap },
     { to: '/nutrition', label: 'Nutrition', icon: UtensilsCrossed },
     { to: '/progress', label: 'Progress', icon: LineChart },
     { to: '/profile', label: 'Profile', icon: User },
@@ -45,7 +47,8 @@ export const AppShell: React.FC = () => {
     location.pathname === '/' ||
     location.pathname.startsWith('/onboarding') ||
     location.pathname === '/login' ||
-    location.pathname === '/assessment';
+    location.pathname === '/assessment' ||
+    location.pathname === '/courses';
 
   const currentUser = services.auth.getCurrentUser();
   const isAuthenticated = !!(

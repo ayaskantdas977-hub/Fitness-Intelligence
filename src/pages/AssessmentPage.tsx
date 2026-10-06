@@ -22,6 +22,7 @@ import { Skeleton } from '../components/ui/Skeleton';
 import { ErrorState } from '../components/ui/ErrorState';
 import { SafeSplitSelector } from '../components/workout/SafeSplitSelector';
 import { evaluateClinicalResearchSafety } from '../engine/clinicalSafetyResearch';
+import { LiveResearchMatrix2026 } from '../components/research/LiveResearchMatrix2026';
 import { useWhyDrawer } from '../context/WhyDrawerContext';
 import { useToast } from '../context/ToastContext';
 import { services, type AssessmentResult } from '../services/registry';
@@ -410,6 +411,9 @@ export const AssessmentPage: React.FC = () => {
           </div>
         </Card>
       )}
+
+      {/* Live 2026 Peer-Reviewed Clinical & Exercise Research Hub */}
+      <LiveResearchMatrix2026 />
 
       {/* Safe Split Selector */}
       {!isRed && plan?.availableSafeSplits && plan.availableSafeSplits.length > 0 && (
