@@ -2,11 +2,19 @@
 
 > **Your intelligent AI fitness coach that actually watches your workout form and calculates food calories down to the exact gram.**
 
-[![React 18](https://img.shields.io/badge/Frontend-React%2018%20%7C%20TypeScript%20%7C%20Vite-61DAFB?style=flat&logo=react)](https://react.dev/)
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20GitHub%20Pages-FF6B1A?style=for-the-badge&logo=github)](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/)
+[![React 19](https://img.shields.io/badge/Frontend-React%2019%20%7C%20TypeScript%20%7C%20Vite-61DAFB?style=flat&logo=react)](https://react.dev/)
 [![Spring Boot](https://img.shields.io/badge/Backend-Spring%20Boot%203%20%7C%20Java%2017-6DB33F?style=flat&logo=springboot)](https://spring.io/projects/spring-boot)
 [![MediaPipe](https://img.shields.io/badge/Vision-Google%20MediaPipe%20Pose-4285F4?style=flat&logo=google)](https://developers.google.com/mediapipe)
-[![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-06B6D4?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
+[![Tests Passing](https://img.shields.io/badge/Tests-59%2F59%20Passing-success?style=flat&logo=vitest)](https://vitest.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+---
+
+### 🌐 [Click here for Live Web Demo](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/)
+- **Academy Courses**: [https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/courses](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/courses)
+- **Clinical Assessment & Research**: [https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/assessment](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/assessment)
+- **Documentation**: [System Architecture](docs/ARCHITECTURE.md) | [Changelog](CHANGELOG.md) | [Contributing](CONTRIBUTING.md)
 
 ---
 
@@ -54,6 +62,17 @@ Best of all, it works **both completely offline in your browser** and connects s
 - Check-in daily with sleep quality, energy levels, and muscle soreness.
 - Automatically scales your recommended workout intensity based on your recovery score.
 
+### 5. 🎓 Udemy-Style Fitness Academy & Courses
+- **Beginner-Friendly Masterclasses**: Guided curricula covering gym onboarding, spine-safe biomechanics, and nutrition.
+- **Certified Clinicians & Trainers**: Courses led by CSCS, DPT, and Registered Dietitians with verified ratings (4.7★ - 4.9★).
+- **Direct 1-on-1 Contact**: Pre-configured WhatsApp instant inquiry hotline and instructor email access.
+- **Budget Pricing Filters**: Built-in pricing slider with dedicated *Around ₹1,500* value tiers.
+
+### 6. 🔬 Live 2026 Clinical Research Matrix
+- **Evidence-Based Biomechanics**: Real-time comparisons between historic dogma and 2024–2026 clinical RCTs (BJSM, ACSM 11th Ed., JOSPT).
+- **Segmented Beat Card UI**: Visual progress indicators and primary journal citations.
+- **Quantified Protection**: Documented biomechanical deltas (-82% lumbar shear, -61% patellar compressive stress).
+
 ---
 
 ## 🛠️ Tech Stack
@@ -78,8 +97,8 @@ Best of all, it works **both completely offline in your browser** and connects s
 ### 1. Run the Frontend (React + Vite)
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/fitness-intelligence.git
-cd fitness-intelligence
+git clone https://github.com/ayaskantdas977-hub/Fitness-Intelligence.git
+cd Fitness-Intelligence
 
 # Install dependencies
 npm install
