@@ -10,7 +10,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-interface ResearchComparisonItem {
+export interface ResearchComparisonItem {
   id: string;
   beatNumber: string;
   shortTitle: string;
@@ -35,7 +35,7 @@ interface ResearchComparisonItem {
   };
 }
 
-const RESEARCH_DATA_2026: ResearchComparisonItem[] = [
+export const RESEARCH_DATA_2026: ResearchComparisonItem[] = [
   {
     id: 'res-spine-axial',
     beatNumber: '01',
