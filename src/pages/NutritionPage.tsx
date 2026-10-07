@@ -286,11 +286,11 @@ export const NutritionPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#FF6B1A] block mb-1">
-            BIOENERGETIC DIARY
+            Daily nutrition
           </span>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl sm:text-3xl font-light text-[var(--text)] tracking-tight">
-              Daily Nutrition & Fueling
+              Daily nutrition and meals
             </h1>
             <Chip
               label="Why this?"
@@ -305,7 +305,7 @@ export const NutritionPage: React.FC = () => {
             />
           </div>
           <p className="text-xs text-[var(--muted)] mt-0.5">
-            Peer-reviewed macronutrient partitioning calibrated for {profile.goal.replace('_', ' ')}.
+            Macronutrient targets based on your goal ({profile.goal.replace('_', ' ')}).
           </p>
         </div>
 
@@ -331,7 +331,7 @@ export const NutritionPage: React.FC = () => {
             className="flex items-center gap-1.5 text-xs text-[#FF6B1A] border-[#FF6B1A]/30 hover:bg-[#FF6B1A]/10 cursor-pointer"
           >
             <Camera className="w-3.5 h-3.5" />
-            <span>Add by Photo</span>
+            <span>Photo scan</span>
           </Button>
 
           <Button
@@ -344,7 +344,7 @@ export const NutritionPage: React.FC = () => {
             className="flex items-center gap-1.5 text-xs cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>Log Food</span>
+            <span>Log food</span>
           </Button>
         </div>
       </div>
@@ -368,7 +368,7 @@ export const NutritionPage: React.FC = () => {
             {/* Protein */}
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[#FF6B1A]">Protein Target</span>
+                <span className="font-semibold text-[#FF6B1A]">Protein target</span>
                 <span className="text-[var(--text)] tabular-nums font-semibold">
                   {currentProtein} / {targetProtein} g
                 </span>
@@ -384,7 +384,7 @@ export const NutritionPage: React.FC = () => {
             {/* Carbs */}
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[#FFB547]">Carbohydrates Target</span>
+                <span className="font-semibold text-[#FFB547]">Carbohydrates target</span>
                 <span className="text-[var(--text)] tabular-nums font-semibold">
                   {currentCarbs} / {targetCarbs} g
                 </span>
@@ -400,7 +400,7 @@ export const NutritionPage: React.FC = () => {
             {/* Fat */}
             <div>
               <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[#D97706] dark:text-[#FFE3C4]">Dietary Fats Target</span>
+                <span className="font-semibold text-[#D97706] dark:text-[#FFE3C4]">Dietary fats target</span>
                 <span className="text-[var(--text)] tabular-nums font-semibold">
                   {currentFat} / {targetFat} g
                 </span>
@@ -420,7 +420,7 @@ export const NutritionPage: React.FC = () => {
       {recentFoods.length > 0 && (
         <div className="space-y-2">
           <span className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] block">
-            Frequent & Recent Items
+            Recent foods
           </span>
           <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
             {recentFoods.map((f) => (
@@ -529,8 +529,8 @@ export const NutritionPage: React.FC = () => {
         <Modal
           isOpen={showSearchModal}
           onClose={() => setShowSearchModal(false)}
-          title={`Log Food to ${activeMealType.toUpperCase()}`}
-          description="Search over 120 verified Indian and international staples with transparent macro values."
+          title={`Log food to ${activeMealType}`}
+          description="Search verified staples and meals with standard nutrition values."
         >
           <div className="space-y-4">
             {/* Meal Type Switcher */}
@@ -604,7 +604,7 @@ export const NutritionPage: React.FC = () => {
                       setShowCustomModal(true);
                     }}
                   >
-                    + Create Custom Food Entry
+                    + Create custom food entry
                   </Button>
                 </div>
               ) : (
@@ -653,7 +653,7 @@ export const NutritionPage: React.FC = () => {
                 }}
                 className="text-[#FF6B1A] hover:underline font-semibold cursor-pointer"
               >
-                + Add Custom Food
+                + Add custom food
               </button>
             </div>
           </div>
@@ -665,13 +665,13 @@ export const NutritionPage: React.FC = () => {
         <Modal
           isOpen={showCustomModal}
           onClose={() => setShowCustomModal(false)}
-          title="Create Custom Food Item"
-          description="Define custom calories and macros. Persisted locally to your personal food database."
+          title="Create custom food item"
+          description="Define calories and macros stored locally in your personal food diary."
         >
           <form onSubmit={handleSaveCustomFood} className="space-y-4 text-xs">
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] block mb-1">
-                Item Name
+                Item name
               </label>
               <input
                 type="text"
@@ -773,7 +773,7 @@ export const NutritionPage: React.FC = () => {
           isOpen={Boolean(editingEntry)}
           onClose={() => setEditingEntry(null)}
           title={`Edit ${editingEntry.name}`}
-          description="Scale portions or fine-tune logged servings."
+          description="Adjust portion weight or serving multiplier."
           footer={
             <>
               <Button
@@ -788,18 +788,18 @@ export const NutritionPage: React.FC = () => {
                 size="sm"
                 onClick={handleSaveEditEntry}
               >
-                Update Entry
+                Update entry
               </Button>
             </>
           }
         >
           <div className="space-y-4">
-            {/* Exact Gram Weight Input */}
+            {/* Portion Weight Input */}
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] block mb-1 flex items-center justify-between">
-                <span>Exact Portion Weight (Grams)</span>
+                <span>Portion weight (grams)</span>
                 <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                  1g Scale Precision
+                  Gram scale
                 </span>
               </label>
               <div className="flex items-center gap-2">
@@ -822,7 +822,7 @@ export const NutritionPage: React.FC = () => {
                 <span className="text-sm font-bold text-[#FF6B1A] pr-1">g</span>
               </div>
 
-              {/* Quick Weight Chips (including 90g!) */}
+              {/* Quick Weight Chips */}
               <div className="flex items-center gap-1.5 flex-wrap pt-2 text-[10px]">
                 {[50, 90, 100, 150, 200, 250].map((preset) => (
                   <button
@@ -850,7 +850,7 @@ export const NutritionPage: React.FC = () => {
             {/* Servings Multiplier */}
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] block mb-1">
-                Servings Multiplier
+                Servings multiplier
               </label>
               <input
                 type="number"
@@ -869,7 +869,7 @@ export const NutritionPage: React.FC = () => {
             </div>
 
             <div className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between text-xs">
-              <span className="text-[var(--muted)]">Adjusted Energy:</span>
+              <span className="text-[var(--muted)]">Adjusted calories:</span>
               <span className="font-bold text-sm text-[#FF6B1A] tabular-nums">
                 {Math.round((editingEntry.calories / (editingEntry.totalGrams || 100)) * editGrams)} kcal
               </span>
@@ -886,8 +886,8 @@ export const NutritionPage: React.FC = () => {
             setShowAIModal(false);
             setAiResult(null);
           }}
-          title="Food Vision AI Analysis"
-          description="On-device plate analysis. Downscaled to 1024px and stripped of EXIF metadata before inference."
+          title="Plate photo analysis"
+          description="Local image processing scaled to 1024px before food detection."
           maxWidth="lg"
         >
           {aiProcessing ? (
@@ -897,9 +897,9 @@ export const NutritionPage: React.FC = () => {
                 <Sparkles className="w-6 h-6 text-[#FF6B1A] absolute inset-0 m-auto" />
               </div>
               <div>
-                <h4 className="text-base font-bold text-[var(--text)]">Segmenting Plate Ingredients...</h4>
+                <h4 className="text-base font-bold text-[var(--text)]">Analyzing plate contents...</h4>
                 <p className="text-xs text-[var(--muted)] mt-1">
-                  Calibrating macro densities and volumetric portion boundaries.
+                  Estimating portion volume and macro density.
                 </p>
               </div>
             </div>
@@ -908,7 +908,7 @@ export const NutritionPage: React.FC = () => {
               {currentUploadedDataUrl && (
                 <div className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                   <div className="flex items-center gap-2">
-                    <span className="text-[var(--muted)] font-medium">Scale Reading / Stated Weight:</span>
+                    <span className="text-[var(--muted)] font-medium">Scale reading / reference weight:</span>
                     <input
                       type="text"
                       placeholder="e.g. 90g"
@@ -923,7 +923,7 @@ export const NutritionPage: React.FC = () => {
                     onClick={() => handleReAnalyzeWithWeight(photoWeightHint || '90g')}
                     className="text-[11px] py-1 px-3 h-auto self-start sm:self-auto cursor-pointer"
                   >
-                    Recalibrate with Exact Weight
+                    Recalibrate with weight
                   </Button>
                 </div>
               )}

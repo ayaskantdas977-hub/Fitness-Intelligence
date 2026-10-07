@@ -212,15 +212,15 @@ export const AICopilotDrawer: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-xs font-bold tracking-tight text-[var(--text)]">
-                    AI Fitness Copilot
+                    Fitness copilot
                   </h3>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
                   <span className="text-[10px] uppercase font-bold text-[#FF6B1A] px-1.5 py-0.2 rounded bg-[#FF6B1A]/10">
-                    Live
+                    Active
                   </span>
                 </div>
                 <p className="text-[10px] text-[var(--muted)]">
-                  Peer-reviewed biomechanics & nutrition formulas
+                  Exercise form and nutrition guidance
                 </p>
               </div>
             </div>
@@ -322,7 +322,7 @@ export const AICopilotDrawer: React.FC = () => {
                   {msg.followUps && msg.followUps.length > 0 && !isGenerating && (
                     <div className="mt-3 pt-2.5 border-t border-[var(--border)] space-y-1.5">
                       <p className="text-[10px] uppercase font-bold text-[var(--muted)] tracking-wider">
-                        Suggested Next Questions
+                        Suggested follow-ups
                       </p>
                       <div className="flex flex-col gap-1.5">
                         {msg.followUps.map((chip, i) => (
@@ -399,14 +399,14 @@ export const AICopilotDrawer: React.FC = () => {
                 onClick={() => sendMessage('Give me the scientifically optimal chest day workout for maximum hypertrophy, including exercise selection, sets, reps, and RIR.')}
                 className="whitespace-nowrap px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] hover:border-[#FF6B1A]/50 text-[var(--text)] hover:text-[#FF6B1A] transition-all cursor-pointer flex items-center gap-1 shrink-0"
               >
-                <span>💪 Chest Growth Plan</span>
+                <span>Chest workout plan</span>
               </button>
               <button
                 type="button"
                 onClick={() => sendMessage('How do I break through a bench press plateau with periodized volume and accessory lifts?')}
                 className="whitespace-nowrap px-2.5 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] hover:border-[#FF6B1A]/50 text-[var(--text)] hover:text-[#FF6B1A] transition-all cursor-pointer flex items-center gap-1 shrink-0"
               >
-                <span>🏋️ Bench Plateau</span>
+                <span>Bench press plateau</span>
               </button>
               <button
                 type="button"
@@ -414,7 +414,7 @@ export const AICopilotDrawer: React.FC = () => {
                 className="whitespace-nowrap px-2.5 py-1 rounded-full bg-[#FF6B1A]/10 border border-[#FF6B1A]/30 text-[#FF6B1A] hover:bg-[#FF6B1A]/20 transition-all cursor-pointer flex items-center gap-1 shrink-0 font-medium"
               >
                 <ImageIcon className="w-3 h-3" />
-                <span>📸 Scan Photo / Meal</span>
+                <span>Attach photo or meal</span>
               </button>
             </div>
 
@@ -432,7 +432,7 @@ export const AICopilotDrawer: React.FC = () => {
                       {selectedMedia.name}
                     </span>
                     <span className="text-[10px] text-[#FF6B1A] uppercase font-mono">
-                      Ready for Gemini Vision
+                      Ready for vision analysis
                     </span>
                   </div>
                 </div>
@@ -493,7 +493,7 @@ export const AICopilotDrawer: React.FC = () => {
               </button>
             </div>
             <p className="text-[10px] text-center text-[var(--muted)]">
-              Live scientific simulation • Calculations verify against published biomechanics
+              Informational assistance. Verify exercise technique with qualified professionals.
             </p>
           </div>
         </aside>
