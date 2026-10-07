@@ -187,9 +187,9 @@ export const AppShell: React.FC = () => {
           <Outlet />
         </main>
 
-        {/* Mobile Bottom Navigation (< 1024px, 375px mobile-first) */}
+        {/* Mobile Bottom Navigation (< 1024px, 360px mobile responsive) */}
         <nav
-          className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[var(--surface)]/95 backdrop-blur-md border-t border-[var(--border)] px-2 py-1.5 flex items-center justify-around"
+          className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[var(--surface)]/95 backdrop-blur-md border-t border-[var(--border)] px-1 py-1 flex items-center justify-between overflow-x-auto scrollbar-none"
           aria-label="Mobile Navigation"
         >
           {navItems.map((item) => {
@@ -199,15 +199,15 @@ export const AppShell: React.FC = () => {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `flex flex-col items-center justify-center p-1.5 rounded-lg min-w-[50px] min-h-[44px] transition-colors ${
+                  `flex flex-col items-center justify-center px-1.5 py-1 rounded-lg min-w-[40px] min-h-[44px] transition-colors shrink-0 ${
                     isActive
                       ? 'text-[#FF6B1A] font-bold'
                       : 'text-[var(--muted)] hover:text-[var(--text)]'
                   }`
                 }
               >
-                <Icon className="w-5 h-5" />
-                <span className="text-[10px] tracking-tight mt-1 font-medium">
+                <Icon className="w-4 h-4" />
+                <span className="text-[9px] tracking-tight mt-0.5 font-medium">
                   {item.label}
                 </span>
               </NavLink>
