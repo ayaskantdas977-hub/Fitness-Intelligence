@@ -225,12 +225,12 @@ export const WorkoutPage: React.FC = () => {
             </span>
             {plan.safeSplitId && (
               <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                🛡️ Safe Split Active
+                Safe split active
               </span>
             )}
             {plan.volumeTier === 'amber_reduced' && !plan.safeSplitId && (
               <span className="text-[10px] font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                Amber Joint Safe
+                Joint safe volume
               </span>
             )}
           </div>
@@ -302,12 +302,12 @@ export const WorkoutPage: React.FC = () => {
                     </h3>
                     {pe.isSubstituted && (
                       <span className="text-[10px] font-bold text-amber-500 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                        Substituted
+                        Swapped
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[var(--muted)] mt-1 italic">
-                    "{pe.exercise.shortCueText}"
+                  <p className="text-xs text-[var(--muted)] mt-1">
+                    {pe.exercise.shortCueText}
                   </p>
                 </div>
 
@@ -319,7 +319,7 @@ export const WorkoutPage: React.FC = () => {
                     className="p-2 text-xs font-semibold text-[var(--muted)] hover:text-[var(--text)] hover:bg-black/5 dark:hover:bg-white/5 rounded-lg border border-[var(--border)] transition-colors flex items-center gap-1 cursor-pointer min-h-[36px]"
                   >
                     <Info className="w-3.5 h-3.5" />
-                    <span>Cues / Swap</span>
+                    <span>Cues & alternate</span>
                   </button>
 
                   {/* Form AI shortcut */}
@@ -333,7 +333,7 @@ export const WorkoutPage: React.FC = () => {
                       className="text-xs font-semibold flex items-center gap-1.5 text-[#FF6B1A] border-[#FF6B1A]/30 hover:bg-[#FF6B1A]/10"
                     >
                       <Scan className="w-3.5 h-3.5" />
-                      <span>Analyze Form</span>
+                      <span>Check form</span>
                     </Button>
                   )}
                 </div>
@@ -356,7 +356,7 @@ export const WorkoutPage: React.FC = () => {
       {/* Bottom Sticky Action Finish Bar */}
       <div className="p-4 rounded-2xl bg-[var(--surface)]/95 border border-[var(--border)] backdrop-blur-md sticky bottom-20 md:bottom-4 z-20 flex items-center justify-between gap-4 shadow-2xl">
         <div className="text-xs">
-          <span className="text-[var(--muted)] block">Workout Progress</span>
+          <span className="text-[var(--muted)] block">Workout progress</span>
           <span className="text-[var(--text)] font-bold text-sm tabular-nums">
             {totalCompletedSets} / {totalSets} sets marked done
           </span>
@@ -369,7 +369,7 @@ export const WorkoutPage: React.FC = () => {
           className="flex items-center gap-2 font-bold cursor-pointer"
         >
           <CheckCircle2 className="w-4 h-4 stroke-[3]" />
-          <span>Complete Session</span>
+          <span>Complete session</span>
         </Button>
       </div>
 
@@ -385,7 +385,7 @@ export const WorkoutPage: React.FC = () => {
             {/* Form Cue */}
             <div className="p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] space-y-1">
               <span className="font-bold text-[var(--text)] block uppercase tracking-wider text-[10px]">
-                Execution Cue
+                Execution cue
               </span>
               <p className="text-sm text-[var(--text)] leading-relaxed">
                 {detailExercise.exercise.shortCueText}
@@ -397,7 +397,7 @@ export const WorkoutPage: React.FC = () => {
               <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-300 flex items-start gap-2">
                 <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold block">Biomechanical Caution</span>
+                  <span className="font-bold block">Biomechanical caution</span>
                   <span>
                     Caution for joints: {detailExercise.exercise.contraindicationTags.join(', ')}. If you experience discomfort, swap below.
                   </span>
@@ -408,7 +408,7 @@ export const WorkoutPage: React.FC = () => {
             {/* Substitution candidates */}
             <div className="space-y-2 pt-2">
               <span className="font-bold text-[var(--text)] block uppercase tracking-wider text-[10px]">
-                Safe Movement Substitutions
+                Alternate movements
               </span>
               <div className="space-y-2">
                 {exerciseLibrary
@@ -439,7 +439,7 @@ export const WorkoutPage: React.FC = () => {
                         }
                         className="text-xs"
                       >
-                        Swap In
+                        Swap
                       </Button>
                     </div>
                   ))}
@@ -454,7 +454,7 @@ export const WorkoutPage: React.FC = () => {
         <Modal
           isOpen={showFinishModal}
           onClose={() => setShowFinishModal(false)}
-          title="Complete Workout Session"
+          title="Complete workout session"
           description={`Log performance metrics for ${activeDay.title}.`}
           footer={
             <>
@@ -463,14 +463,14 @@ export const WorkoutPage: React.FC = () => {
                 size="md"
                 onClick={() => setShowFinishModal(false)}
               >
-                Keep Training
+                Continue session
               </Button>
               <Button
                 variant="primary"
                 size="md"
                 onClick={handleFinishWorkout}
               >
-                Confirm & Log
+                Save session
               </Button>
             </>
           }
@@ -478,7 +478,7 @@ export const WorkoutPage: React.FC = () => {
           <div className="space-y-4">
             <div className="p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between text-xs">
               <div>
-                <span className="text-[var(--muted)] block">Completed Sets</span>
+                <span className="text-[var(--muted)] block">Completed sets</span>
                 <span className="text-xl font-bold text-[var(--text)] tabular-nums">
                   {totalCompletedSets}
                 </span>
@@ -493,11 +493,11 @@ export const WorkoutPage: React.FC = () => {
 
             <div>
               <label className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] block mb-1.5">
-                Session Notes & Perceived Exertion (Optional)
+                Session notes (optional)
               </label>
               <textarea
                 rows={3}
-                placeholder="How did the session feel? Any joint tightness or PRs?"
+                placeholder="Notes on weights used, exertion, or joint comfort."
                 value={sessionNotes}
                 onChange={(e) => setSessionNotes(e.target.value)}
                 className="w-full bg-[var(--surface-2)] border border-[var(--border)] rounded-xl p-3 text-xs text-[var(--text)] focus:border-[#FF6B1A] focus:outline-none"

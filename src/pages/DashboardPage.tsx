@@ -211,13 +211,13 @@ export const DashboardPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#FF6B1A] block mb-1">
-            FITNESS INTELLIGENCE • SYSTEM ACTIVE
+            Training and nutrition overview
           </span>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-light text-[var(--text)] tracking-tight">
             Welcome back, <span className="font-semibold">{profile.name}</span>.
           </h1>
-          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5">
-            {profile.goal.replace('_', ' ').toUpperCase()} PROTOCOL • {profile.trainingDaysPerWeek} DAYS/WEEK
+          <p className="text-xs sm:text-sm text-[var(--muted)] mt-0.5 capitalize">
+            {profile.goal.replace('_', ' ')} protocol • {profile.trainingDaysPerWeek} days / week
           </p>
         </div>
 
@@ -247,14 +247,17 @@ export const DashboardPage: React.FC = () => {
         />
       )}
 
-      {/* Primary Metrics Grid (Calorie Ring, Macros, Water) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Card 1: Calorie Ring */}
-        <Card variant="default" className="p-6 border-[var(--border)] flex flex-col justify-between">
+      {/* Primary Metrics: Asymmetric Focal Nutrition Hub (Wide) + Hydration Utility (Narrow) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Focal Block: Caloric Balance & Macronutrient Hub */}
+        <Card variant="default" className="lg:col-span-8 p-6 border-[var(--border)] flex flex-col justify-between">
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <span className="text-xs uppercase font-bold tracking-wider text-[var(--muted)]">
-              Daily Caloric Balance
-            </span>
+            <div>
+              <span className="text-xs uppercase font-bold tracking-wider text-[var(--text)] block">
+                Daily energy and macronutrient balance
+              </span>
+              <span className="text-[11px] text-[var(--muted)]">Calculated from Mifflin-St Jeor and goal delta</span>
+            </div>
             <button
               onClick={() =>
                 openDrawer({
@@ -269,111 +272,94 @@ export const DashboardPage: React.FC = () => {
             </button>
           </div>
 
-          <div className="py-4 flex items-center justify-center">
-            <Ring
-              value={currentCalories}
-              target={targetCalories}
-              size={150}
-              strokeWidth={10}
-              useCalorieGradient
-              unit="kcal"
-              label="Remaining"
-              sublabel={`${Math.max(0, targetCalories - currentCalories)} left`}
-            />
-          </div>
+          <div className="py-4 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            {/* Calorie Ring */}
+            <div className="md:col-span-5 flex flex-col items-center justify-center">
+              <Ring
+                value={currentCalories}
+                target={targetCalories}
+                size={144}
+                strokeWidth={10}
+                useCalorieGradient
+                unit="kcal"
+                label="Remaining"
+                sublabel={`${Math.max(0, targetCalories - currentCalories)} left`}
+              />
+              <div className="flex items-center gap-4 text-xs mt-3 text-[var(--muted)]">
+                <span>Consumed: <strong className="text-[var(--text)] tabular-nums">{currentCalories}</strong></span>
+                <span>Target: <strong className="text-[var(--text)] tabular-nums">{targetCalories}</strong></span>
+              </div>
+            </div>
 
-          <div className="flex items-center justify-between text-xs pt-2 border-t border-[var(--border)] text-[var(--muted)]">
-            <span>Consumed: <strong className="text-[var(--text)] tabular-nums">{currentCalories}</strong></span>
-            <span>Target: <strong className="text-[var(--text)] tabular-nums">{targetCalories}</strong></span>
+            {/* Macro Bars */}
+            <div className="md:col-span-7 space-y-3.5 md:border-l md:border-[var(--border)] md:pl-6">
+              {/* Protein */}
+              <div>
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="font-semibold text-[#FF6B1A]">Protein</span>
+                  <span className="text-[var(--text)] tabular-nums font-semibold">
+                    {currentProtein} / {targetProtein} g
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-[var(--surface-2)] rounded-full overflow-hidden">
+                  <div
+                    style={{ width: `${Math.min(100, (currentProtein / targetProtein) * 100)}%` }}
+                    className="h-full bg-[#FF6B1A] rounded-full transition-all duration-500"
+                  />
+                </div>
+              </div>
+
+              {/* Carbs */}
+              <div>
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="font-semibold text-[#FFB547]">Carbohydrates</span>
+                  <span className="text-[var(--text)] tabular-nums font-semibold">
+                    {currentCarbs} / {targetCarbs} g
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-[var(--surface-2)] rounded-full overflow-hidden">
+                  <div
+                    style={{ width: `${Math.min(100, (currentCarbs / targetCarbs) * 100)}%` }}
+                    className="h-full bg-[#FFB547] rounded-full transition-all duration-500"
+                  />
+                </div>
+              </div>
+
+              {/* Fats */}
+              <div>
+                <div className="flex justify-between text-xs mb-1">
+                  <span className="font-semibold text-[#D97706] dark:text-[#FFE3C4]">Dietary Fats</span>
+                  <span className="text-[var(--text)] tabular-nums font-semibold">
+                    {currentFat} / {targetFat} g
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-[var(--surface-2)] rounded-full overflow-hidden">
+                  <div
+                    style={{ width: `${Math.min(100, (currentFat / targetFat) * 100)}%` }}
+                    className="h-full bg-[#FFE3C4] rounded-full transition-all duration-500"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 flex justify-end">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/nutrition')}
+                  className="text-xs font-semibold"
+                >
+                  Log meal in diary
+                </Button>
+              </div>
+            </div>
           </div>
         </Card>
 
-        {/* Card 2: Macronutrient Progress */}
-        <Card variant="default" className="p-6 border-[var(--border)] flex flex-col justify-between space-y-4">
+        {/* Secondary Utility Block: Daily Hydration */}
+        <Card variant="default" className="lg:col-span-4 p-6 border-[var(--border)] flex flex-col justify-between">
           <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
             <span className="text-xs uppercase font-bold tracking-wider text-[var(--muted)]">
-              Macronutrient Progress
-            </span>
-            <button
-              onClick={() =>
-                openDrawer({
-                  title: 'Macronutrient Targets',
-                  valueDisplay: `${targetProtein}g P / ${targetCarbs}g C / ${targetFat}g F`,
-                  explanation: assessment.macros.explanation,
-                })
-              }
-              className="text-xs text-[#FF6B1A] hover:underline font-semibold cursor-pointer"
-            >
-              Why this?
-            </button>
-          </div>
-
-          {/* Macro Bars */}
-          <div className="space-y-3.5 flex-1 justify-center flex flex-col">
-            {/* Protein */}
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[#FF6B1A]">Protein</span>
-                <span className="text-[var(--text)] tabular-nums font-semibold">
-                  {currentProtein} / {targetProtein} g
-                </span>
-              </div>
-              <div className="h-2 w-full bg-[var(--surface-2)] rounded-full overflow-hidden">
-                <div
-                  style={{ width: `${Math.min(100, (currentProtein / targetProtein) * 100)}%` }}
-                  className="h-full bg-[#FF6B1A] rounded-full transition-all duration-500"
-                />
-              </div>
-            </div>
-
-            {/* Carbs */}
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[#FFB547]">Carbohydrates</span>
-                <span className="text-[var(--text)] tabular-nums font-semibold">
-                  {currentCarbs} / {targetCarbs} g
-                </span>
-              </div>
-              <div className="h-2 w-full bg-[var(--surface-2)] rounded-full overflow-hidden">
-                <div
-                  style={{ width: `${Math.min(100, (currentCarbs / targetCarbs) * 100)}%` }}
-                  className="h-full bg-[#FFB547] rounded-full transition-all duration-500"
-                />
-              </div>
-            </div>
-
-            {/* Fats */}
-            <div>
-              <div className="flex justify-between text-xs mb-1">
-                <span className="font-semibold text-[#D97706] dark:text-[#FFE3C4]">Dietary Fats</span>
-                <span className="text-[var(--text)] tabular-nums font-semibold">
-                  {currentFat} / {targetFat} g
-                </span>
-              </div>
-              <div className="h-2 w-full bg-[var(--surface-2)] rounded-full overflow-hidden">
-                <div
-                  style={{ width: `${Math.min(100, (currentFat / targetFat) * 100)}%` }}
-                  className="h-full bg-[#FFE3C4] rounded-full transition-all duration-500"
-                />
-              </div>
-            </div>
-          </div>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => navigate('/nutrition')}
-            className="w-full text-xs font-semibold"
-          >
-            Open Food Diary
-          </Button>
-        </Card>
-
-        {/* Card 3: Water Tracker & Quick-Add */}
-        <Card variant="default" className="p-6 border-[var(--border)] flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
-            <span className="text-xs uppercase font-bold tracking-wider text-[var(--muted)]">
-              Daily Hydration
+              Daily hydration
             </span>
             <button
               onClick={() =>
@@ -432,11 +418,11 @@ export const DashboardPage: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Dumbbell className="w-4 h-4 text-[#FF6B1A]" />
                 <span className="text-xs uppercase font-bold tracking-wider text-[var(--text)]">
-                  Today's Session
+                  Today's session
                 </span>
                 {readinessAdj === 'reduce_volume' && (
                   <span className="text-[10px] font-bold text-amber-500 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
-                    -30% Volume Applied
+                    -30% volume applied
                   </span>
                 )}
               </div>
@@ -470,11 +456,12 @@ export const DashboardPage: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="space-y-2">
+                {/* Clean divider list without nested boxed borders */}
+                <div className="divide-y divide-[var(--border)] pt-1">
                   {adjustedWorkoutExercises?.slice(0, 4).map((ex, i) => (
                     <div
                       key={i}
-                      className="p-3 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between text-xs"
+                      className="py-2.5 flex items-center justify-between text-xs first:pt-0"
                     >
                       <div>
                         <span className="font-semibold text-[var(--text)] block">
@@ -486,14 +473,14 @@ export const DashboardPage: React.FC = () => {
                       </div>
                       {ex.isSubstituted && (
                         <span className="text-[10px] font-semibold text-amber-500 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">
-                          Joint Safe
+                          Joint safe
                         </span>
                       )}
                     </div>
                   ))}
                 </div>
 
-                <div className="pt-2 flex items-center gap-3">
+                <div className="pt-3 border-t border-[var(--border)] flex items-center gap-3">
                   <Button
                     variant="primary"
                     size="md"
@@ -501,7 +488,7 @@ export const DashboardPage: React.FC = () => {
                     className="flex-1 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <Play className="w-4 h-4 fill-current" />
-                    <span>Start Today's Workout</span>
+                    <span>Start workout</span>
                   </Button>
 
                   <Button
@@ -510,13 +497,13 @@ export const DashboardPage: React.FC = () => {
                     onClick={() => navigate('/form-checker')}
                     className="text-xs font-semibold cursor-pointer"
                   >
-                    Form AI
+                    Check form
                   </Button>
                 </div>
               </div>
             ) : (
               <div className="p-4 text-center text-xs text-[var(--muted)]">
-                Rest day scheduled. Enjoy your recovery!
+                Rest day scheduled for recovery.
               </div>
             )}
           </Card>
@@ -527,7 +514,7 @@ export const DashboardPage: React.FC = () => {
           <Card variant="default" className="p-6 border-[var(--border)] space-y-4 flex flex-col justify-between">
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border)]">
               <span className="text-xs uppercase font-bold tracking-wider text-[var(--muted)]">
-                Weight Progression
+                Weight progression
               </span>
               <button
                 type="button"
@@ -535,7 +522,7 @@ export const DashboardPage: React.FC = () => {
                 className="text-xs text-[#FF6B1A] hover:underline font-semibold cursor-pointer flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" />
-                <span>Log Weigh-In</span>
+                <span>Log weight</span>
               </button>
             </div>
 
@@ -592,7 +579,7 @@ export const DashboardPage: React.FC = () => {
               onClick={() => navigate('/progress')}
               className="w-full text-xs font-semibold"
             >
-              View Analytics & Charts
+              View progress analytics
             </Button>
           </Card>
         </div>
@@ -612,14 +599,14 @@ export const DashboardPage: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-base font-bold text-[var(--text)] tracking-tight">
-                    Longevity Habits Guideline
+                    Weekly activity guidelines
                   </h3>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--muted)] bg-[var(--surface-2)] px-2 py-0.5 rounded border border-[var(--border)]">
-                    Guideline • Not a Health Score
+                    Public health benchmark
                   </span>
                 </div>
                 <p className="text-xs text-[var(--muted)] mt-0.5">
-                  Weekly progress against WHO/CDC public-health longevity benchmarks
+                  Progress against WHO public-health activity targets
                 </p>
               </div>
             </div>
@@ -638,9 +625,10 @@ export const DashboardPage: React.FC = () => {
             </button>
           </div>
 
+          {/* Clean unbordered 2-column layout */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 py-2">
             {/* Ring 1: Active Movement Minutes (Target: 150 min) */}
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)]">
+            <div className="flex items-center gap-4 py-2">
               <Ring
                 value={guidelineProgress.activeMinutes.current}
                 target={guidelineProgress.activeMinutes.target}
@@ -653,7 +641,7 @@ export const DashboardPage: React.FC = () => {
               />
               <div className="flex-1">
                 <span className="text-xs uppercase font-bold tracking-wider text-[#FF6B1A]">
-                  Active Movement
+                  Active movement
                 </span>
                 <div className="text-xl font-bold text-[var(--text)] mt-1 tabular-nums">
                   {guidelineProgress.activeMinutes.current}{' '}
@@ -666,7 +654,7 @@ export const DashboardPage: React.FC = () => {
             </div>
 
             {/* Ring 2: Strength Days (Target: 2 days) */}
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)]">
+            <div className="flex items-center gap-4 py-2 sm:border-l sm:border-[var(--border)] sm:pl-6">
               <Ring
                 value={guidelineProgress.strengthDays.current}
                 target={guidelineProgress.strengthDays.target}
@@ -679,7 +667,7 @@ export const DashboardPage: React.FC = () => {
               />
               <div className="flex-1">
                 <span className="text-xs uppercase font-bold tracking-wider text-green-600 dark:text-[#22C55E]">
-                  Muscle Strengthening
+                  Muscle strengthening
                 </span>
                 <div className="text-xl font-bold text-[var(--text)] mt-1 tabular-nums">
                   {guidelineProgress.strengthDays.current}{' '}

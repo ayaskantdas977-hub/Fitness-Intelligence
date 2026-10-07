@@ -700,13 +700,13 @@ export const FormCheckerPage: React.FC = () => {
       <div>
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B1A]/10 text-xs font-semibold text-[#FF6B1A] mb-1.5">
           <Scan className="w-3.5 h-3.5" />
-          <span>IN-BROWSER BIOMECHANICS AI</span>
+          <span>On-device movement analysis</span>
         </div>
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-light text-[var(--text)] tracking-tight">
-          Exercise Form Checker
+          Exercise form checker
         </h1>
         <p className="text-xs sm:text-sm text-[var(--muted)] mt-1 leading-relaxed">
-          Processed on your device — video is never uploaded. Real-time joint angle state machines calculate depth, posture, and rep counts.
+          Processed on your device. Video frames are analyzed locally in browser memory to estimate joint angles, depth, and repetitions.
         </p>
       </div>
 
@@ -715,9 +715,9 @@ export const FormCheckerPage: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2">
           {(
             [
-              { id: 'squat', label: 'Barbell / Bodyweight Squat' },
-              { id: 'push_up', label: 'Push-Up' },
-              { id: 'biceps_curl', label: 'Dumbbell Biceps Curl' },
+              { id: 'squat', label: 'Squat (barbell or bodyweight)' },
+              { id: 'push_up', label: 'Push-up' },
+              { id: 'biceps_curl', label: 'Biceps curl' },
             ] as const
           ).map((ex) => (
             <button
@@ -748,7 +748,7 @@ export const FormCheckerPage: React.FC = () => {
           }`}
         >
           <Headphones className="w-4 h-4 text-[#FF6B1A]" />
-          <span>Voice Coach HUD</span>
+          <span>Voice coach settings</span>
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
         </button>
       </div>
@@ -818,21 +818,21 @@ export const FormCheckerPage: React.FC = () => {
                       <>
                         <span className="w-2 h-2 rounded-full bg-[#22C55E] animate-ping" />
                         <span className="font-bold uppercase tracking-wider text-[#22C55E]">
-                          LIVE CAMERA
+                          Live camera
                         </span>
                       </>
                     ) : videoSrc === 'photo' ? (
                       <>
                         <ImageIcon className="w-3 h-3 text-[#FF6B1A]" />
                         <span className="font-bold uppercase tracking-wider">
-                          PHOTO SNAPSHOT
+                          Photo snapshot
                         </span>
                       </>
                     ) : (
                       <>
                         <span className="w-2 h-2 rounded-full bg-[#FF6B1A] animate-ping" />
                         <span className="font-bold uppercase tracking-wider">
-                          {isSimulationMode ? 'DEMO SIMULATION' : 'LOCAL VIDEO PIPELINE'}
+                          {isSimulationMode ? 'Demo simulation' : 'Local video stream'}
                         </span>
                       </>
                     )}
@@ -840,14 +840,14 @@ export const FormCheckerPage: React.FC = () => {
                   {videoSrc !== 'photo' && (
                     <>
                       <p className="tabular-nums">
-                        PRIMARY ANGLE:{' '}
+                        Primary angle:{' '}
                         <strong className="text-[#FF6B1A]">{Math.round(currentJointAngle)}°</strong>
                       </p>
-                      <p className="tabular-nums text-white">REPS: {repCount}</p>
+                      <p className="tabular-nums text-white">Reps: {repCount}</p>
                     </>
                   )}
                   {videoSrc === 'photo' && (
-                    <p className="text-[10px] text-white/70">Ready for Gemini Vision Biomechanics Audit</p>
+                    <p className="text-[10px] text-white/70">Ready for AI posture check</p>
                   )}
                 </div>
               </div>
@@ -859,10 +859,10 @@ export const FormCheckerPage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-[var(--text)]">
-                    Choose Input for Form & Biomechanics Analysis
+                    Select input source for form check
                   </h3>
                   <p className="text-xs text-[var(--muted)] mt-1 leading-relaxed">
-                    Track live repetitions with your camera, upload an exercise video/photo, or run a simulated test session.
+                    Track live repetitions with your camera, upload an exercise video or photo, or run a simulated test session.
                   </p>
                 </div>
 
@@ -898,7 +898,7 @@ export const FormCheckerPage: React.FC = () => {
                     className="flex items-center justify-center gap-2 cursor-pointer bg-gradient-to-r from-[#FF6B1A] to-[#FF8A3D] text-white font-bold shadow-lg shadow-[#FF6B1A]/20 hover:scale-[1.02] transition-transform"
                   >
                     <Camera className="w-4 h-4" />
-                    <span>Use Live Camera</span>
+                    <span>Start live camera</span>
                   </Button>
 
                   {/* 2. Video Upload */}
@@ -909,7 +909,7 @@ export const FormCheckerPage: React.FC = () => {
                     className="flex items-center justify-center gap-2 cursor-pointer border-[var(--border)] hover:border-black/20 dark:hover:border-white/20 text-[var(--text)]"
                   >
                     <Upload className="w-4 h-4 text-[#FF6B1A]" />
-                    <span>Upload Video</span>
+                    <span>Upload video</span>
                   </Button>
 
                   {/* 3. Photo / Snapshot */}
@@ -920,7 +920,7 @@ export const FormCheckerPage: React.FC = () => {
                     className="flex items-center justify-center gap-2 cursor-pointer border-[var(--border)] hover:border-black/20 dark:hover:border-white/20 text-[var(--text)]"
                   >
                     <ImageIcon className="w-4 h-4 text-[#FFB547]" />
-                    <span>Upload Photo</span>
+                    <span>Upload photo</span>
                   </Button>
 
                   {/* 4. Demo Simulation */}
@@ -931,7 +931,7 @@ export const FormCheckerPage: React.FC = () => {
                     className="text-xs text-[var(--muted)] border-[var(--border)] hover:bg-[#FF6B1A]/10 hover:text-[#FF6B1A] cursor-pointer flex items-center justify-center gap-2"
                   >
                     <Sparkles className="w-3.5 h-3.5 text-[#FF6B1A]" />
-                    <span>Demo Simulation</span>
+                    <span>Run simulation</span>
                   </Button>
                 </div>
               </div>
@@ -950,7 +950,7 @@ export const FormCheckerPage: React.FC = () => {
           {modelError && (
             <div className="mt-3">
               <ErrorState
-                title="Local Vision Loading Notice"
+                title="Model loading notice"
                 message={modelError}
                 onRetry={initPoseLandmarker}
               />
@@ -964,17 +964,17 @@ export const FormCheckerPage: React.FC = () => {
           <Card variant="default" className="p-5 border-[var(--border)] space-y-4">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
               <span className="text-xs uppercase font-bold tracking-wider text-[var(--muted)]">
-                Telemetry Feed
+                Live telemetry
               </span>
               <div className="flex items-center gap-2">
                 {isProcessing && (
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#FF6B1A]/20 text-[#FF6B1A] font-mono animate-pulse">
-                    Tracking Active
+                    Tracking active
                   </span>
                 )}
                 {isModelLoading && (
                   <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-mono animate-pulse">
-                    Loading Model...
+                    Loading model...
                   </span>
                 )}
                 <span className="text-xs font-mono font-bold text-[#FF6B1A] capitalize">
@@ -983,19 +983,20 @@ export const FormCheckerPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 text-center">
-              <div className="bg-[var(--surface-2)] p-3 rounded-xl border border-[var(--border)]">
+            {/* Flattened metrics row with dividers */}
+            <div className="grid grid-cols-2 border-t border-b border-[var(--border)] py-3 text-center">
+              <div className="border-r border-[var(--border)] pr-2">
                 <span className="text-[10px] uppercase font-bold text-[var(--muted)] block">
-                  Reps Counted
+                  Completed reps
                 </span>
                 <span className="text-3xl font-light text-[var(--text)] tabular-nums">
                   {repCount}
                 </span>
               </div>
 
-              <div className="bg-[var(--surface-2)] p-3 rounded-xl border border-[var(--border)]">
+              <div className="pl-2">
                 <span className="text-[10px] uppercase font-bold text-[var(--muted)] block">
-                  Joint Angle
+                  Joint angle
                 </span>
                 <span className="text-3xl font-light text-[#FF6B1A] tabular-nums">
                   {Math.round(currentJointAngle)}°
@@ -1021,7 +1022,7 @@ export const FormCheckerPage: React.FC = () => {
                   ) : (
                     <>
                       <Bot className="w-4 h-4" />
-                      <span>Run Gemini AI Vision Audit</span>
+                      <span>Run AI posture check</span>
                     </>
                   )}
                 </Button>
@@ -1034,7 +1035,7 @@ export const FormCheckerPage: React.FC = () => {
                     className="flex-1 flex items-center justify-center gap-1.5 text-xs text-[var(--muted)] hover:text-[var(--text)]"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
-                    <span>Reset / Change</span>
+                    <span>Reset source</span>
                   </Button>
 
                   {isCameraMode && (
@@ -1045,7 +1046,7 @@ export const FormCheckerPage: React.FC = () => {
                       className="flex-1 flex items-center justify-center gap-1.5 text-xs text-rose-500 border-rose-500/30 hover:bg-rose-500/10"
                     >
                       <X className="w-3.5 h-3.5" />
-                      <span>Stop Camera</span>
+                      <span>Stop camera</span>
                     </Button>
                   )}
                 </div>
@@ -1057,7 +1058,7 @@ export const FormCheckerPage: React.FC = () => {
           <Card variant="default" className="p-5 border-[var(--border)] space-y-3">
             <div className="flex items-center justify-between pb-2 border-b border-[var(--border)]">
               <span className="text-xs uppercase font-bold tracking-wider text-[var(--muted)]">
-                Form Flags ({flags.length}/3)
+                Form flags ({flags.length}/3)
               </span>
               <span className="text-[10px] text-[var(--muted)]">Rule-based feedback</span>
             </div>
@@ -1065,7 +1066,7 @@ export const FormCheckerPage: React.FC = () => {
             {flags.length === 0 ? (
               <div className="py-4 text-center text-xs text-emerald-600 dark:text-emerald-400 flex flex-col items-center gap-1.5">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
-                <span>Zero mechanical faults flagged so far.</span>
+                <span>No form faults flagged so far.</span>
               </div>
             ) : (
               <div className="space-y-2">
@@ -1093,7 +1094,7 @@ export const FormCheckerPage: React.FC = () => {
           <div className="p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] space-y-1.5 text-[11px] text-[var(--muted)] leading-relaxed">
             <div className="flex items-center gap-1.5 text-[var(--text)] font-semibold">
               <Shield className="w-3.5 h-3.5 text-[#FF6B1A]" />
-              <span>Edge Privacy Guarantee</span>
+              <span>On-device processing</span>
             </div>
             <p>
               Video frames are processed entirely in browser memory and instantly discarded. No video is ever stored or transmitted to external servers.
@@ -1119,14 +1120,14 @@ export const FormCheckerPage: React.FC = () => {
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="text-base font-bold text-[var(--text)] tracking-tight">
-                    Google Gemini Multimodal Biomechanics Audit
+                    Google Gemini biomechanics review
                   </h3>
                   <span className="text-[10px] uppercase font-bold text-[#FF6B1A] px-2 py-0.5 rounded-full bg-[#FF6B1A]/10 border border-[#FF6B1A]/20">
-                    Live Vision Review
+                    Biomechanics review
                   </span>
                 </div>
                 <p className="text-xs text-[var(--muted)]">
-                  Kinematic joint angle assessment, bar path analysis, and NSCA corrective cues
+                  Joint angle evaluation, bar path consistency, and technique notes
                 </p>
               </div>
             </div>
@@ -1141,7 +1142,7 @@ export const FormCheckerPage: React.FC = () => {
                 className="flex items-center gap-1.5 text-xs text-[#FF6B1A] border-[#FF6B1A]/40 hover:bg-[#FF6B1A]/10 cursor-pointer"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
-                <span>Discuss in AI Coach</span>
+                <span>Discuss in AI coach</span>
               </Button>
               <button
                 type="button"
@@ -1162,7 +1163,7 @@ export const FormCheckerPage: React.FC = () => {
           {/* Citations and Follow-up quick buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[10px] text-[var(--muted)] font-semibold">Grounded In:</span>
+              <span className="text-[10px] text-[var(--muted)] font-semibold">Grounded in:</span>
               {geminiAuditResult.sourceTags.map((tag, i) => (
                 <span
                   key={i}
@@ -1202,28 +1203,29 @@ export const FormCheckerPage: React.FC = () => {
               <span className="p-1.5 rounded-lg bg-[#FF6B1A]/15 text-[#FF6B1A]">
                 <Activity className="w-4 h-4" />
               </span>
-              <h3 className="text-base font-bold text-[var(--text)]">Session Analysis Summary</h3>
+              <h3 className="text-base font-bold text-[var(--text)]">Session analysis summary</h3>
             </div>
             <span className="text-xs font-mono text-[var(--muted)]">
               {new Date(summary.analyzedAt).toLocaleTimeString()}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-            <div className="bg-[var(--surface-2)] p-3 rounded-xl border border-[var(--border)]">
+          {/* Flattened summary metrics */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 border-t border-b border-[var(--border)] py-3 text-center gap-2 sm:gap-0">
+            <div className="sm:border-r border-[var(--border)] px-3">
               <span className="text-xs text-[var(--muted)] block">Exercise</span>
               <span className="text-sm font-bold text-[var(--text)] capitalize">
                 {summary.exerciseType.replace('_', ' ')}
               </span>
             </div>
-            <div className="bg-[var(--surface-2)] p-3 rounded-xl border border-[var(--border)]">
-              <span className="text-xs text-[var(--muted)] block">Total Reps</span>
+            <div className="sm:border-r border-[var(--border)] px-3">
+              <span className="text-xs text-[var(--muted)] block">Total reps</span>
               <span className="text-2xl font-bold text-[var(--text)] tabular-nums">
                 {summary.totalReps}
               </span>
             </div>
-            <div className="bg-[var(--surface-2)] p-3 rounded-xl border border-[var(--border)]">
-              <span className="text-xs text-[var(--muted)] block">Flags Recorded</span>
+            <div className="px-3">
+              <span className="text-xs text-[var(--muted)] block">Flags recorded</span>
               <span className="text-2xl font-bold text-amber-500 tabular-nums">
                 {summary.flags.length}
               </span>
@@ -1239,7 +1241,7 @@ export const FormCheckerPage: React.FC = () => {
                 navigate('/workout');
               }}
             >
-              Save Summary & Return
+              Save summary and return
             </Button>
           </div>
         </Card>

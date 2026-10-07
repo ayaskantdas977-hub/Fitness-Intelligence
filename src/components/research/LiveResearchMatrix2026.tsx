@@ -252,13 +252,16 @@ export const LiveResearchMatrix2026: React.FC = () => {
           <div className="flex items-center gap-2.5">
             <span className="w-2.5 h-2.5 rounded-full bg-[#FF6B1A] animate-pulse shrink-0" />
             <span className="text-xs sm:text-sm font-mono font-bold uppercase tracking-wider text-[#FF6B1A]">
-              BEAT {activeBeat.beatNumber} OF {String(RESEARCH_DATA_2026.length).padStart(2, '0')}
+              Beat {activeBeat.beatNumber} of {String(RESEARCH_DATA_2026.length).padStart(2, '0')}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-[10px] sm:text-xs font-mono uppercase tracking-wider text-[#FFB547] bg-[#FFB547]/10 border border-[#FFB547]/25 px-2.5 py-1 rounded-[4px] font-bold">
               {activeBeat.evidenceGrade}
+            </span>
+            <span className="text-[10px] font-mono text-zinc-400 bg-white/5 border border-white/10 px-2 py-0.5 rounded-[4px] hidden sm:inline">
+              Sample data
             </span>
             <div className="hidden sm:flex items-center gap-1 pl-2">
               <button
@@ -302,7 +305,7 @@ export const LiveResearchMatrix2026: React.FC = () => {
             rel="noopener noreferrer"
             className="text-xs text-[#FF6B1A] hover:text-[#FF8A3D] font-bold underline underline-offset-4 cursor-pointer shrink-0"
           >
-            View Study
+            View study
           </a>
         </div>
 
@@ -335,7 +338,7 @@ export const LiveResearchMatrix2026: React.FC = () => {
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#FF6B1A]" />
             <h4 className="text-sm font-bold text-[var(--text)] uppercase tracking-wider">
-              Recent 2024–2026 Clinical Shifts vs Historic Dogma
+              Clinical shifts compared with previous recommendations
             </h4>
           </div>
 
@@ -344,7 +347,7 @@ export const LiveResearchMatrix2026: React.FC = () => {
             onClick={() => setShowFullMatrix(!showFullMatrix)}
             className="text-xs font-bold text-[#EA580C] dark:text-[#FFB547] hover:underline cursor-pointer flex items-center gap-1"
           >
-            <span>{showFullMatrix ? 'Hide Detailed Matrices' : 'Show Full Comparison Matrix (All 6 Beats)'}</span>
+            <span>{showFullMatrix ? 'Hide comparison matrix' : 'Show full comparison matrix'}</span>
             <TrendingUp className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -354,10 +357,10 @@ export const LiveResearchMatrix2026: React.FC = () => {
           <div className="p-4 rounded-xl bg-black/[0.03] dark:bg-black/30 border border-black/10 dark:border-white/5 space-y-1.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-rose-500 flex items-center gap-1">
               <History className="w-3 h-3" />
-              Previous Historic Standard ({activeBeat.previousStandardYear}):
+              Previous standard ({activeBeat.previousStandardYear}):
             </span>
             <p className="text-xs text-[var(--text)] font-medium leading-relaxed">
-              "{activeBeat.previousStandardText}"
+              {activeBeat.previousStandardText}
             </p>
             <p className="text-[11px] text-[var(--muted)] pt-1">
               <strong>Limitation:</strong> {activeBeat.previousLimitation}
@@ -367,13 +370,13 @@ export const LiveResearchMatrix2026: React.FC = () => {
           <div className="p-4 rounded-xl bg-emerald-500/[0.08] border border-emerald-500/25 space-y-1.5">
             <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
               <CheckCircle2 className="w-3 h-3" />
-              Live 2026 Peer-Reviewed Consensus ({activeBeat.live2026StandardYear}):
+              Current consensus ({activeBeat.live2026StandardYear}):
             </span>
             <p className="text-xs text-[var(--text)] font-semibold leading-relaxed">
-              "{activeBeat.live2026StandardText}"
+              {activeBeat.live2026StandardText}
             </p>
             <p className="text-[11px] text-emerald-700 dark:text-emerald-300 pt-1 font-medium">
-              <strong>2026 Clinical Metric:</strong> {activeBeat.keyMetrics.label} ({activeBeat.keyMetrics.value}) • {activeBeat.clinicalAdvantage2026}
+              <strong>Clinical metric:</strong> {activeBeat.keyMetrics.label} ({activeBeat.keyMetrics.value}) • {activeBeat.clinicalAdvantage2026}
             </p>
           </div>
         </div>

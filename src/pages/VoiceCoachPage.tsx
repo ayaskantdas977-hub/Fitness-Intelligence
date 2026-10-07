@@ -83,26 +83,26 @@ export const VoiceCoachPage: React.FC = () => {
         <div className="max-w-2xl relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B1A]/10 text-xs font-bold text-[#FF6B1A] mb-3 border border-[#FF6B1A]/20">
             <Headphones className="w-3.5 h-3.5" />
-            <span>HANDS-FREE GYM AUDIO COMPANION</span>
+            <span>Hands-free audio coaching</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-light text-[var(--text)] tracking-tight">
-            AI Voice Coach & Audio Studio
+            Voice coach and audio studio
           </h1>
           <p className="text-sm text-[var(--muted)] mt-2 leading-relaxed">
-            When you're training under heavy load, you can't keep staring at a screen. Our client-side Web Speech & Web Audio engine announces real-time joint corrections, rep counts, and cadence metronomes straight into your headphones.
+            When you're training under heavy load, staring at a screen is impractical. Web Speech and audio cues announce real-time joint corrections, rep counts, and cadence metronomes directly through your headphones.
           </p>
 
           <div className="flex flex-wrap items-center gap-3 mt-5">
             <button
               onClick={() => navigate('/form-checker')}
-              className="px-4 py-2 rounded-xl bg-[#FF6B1A] hover:bg-[#FF8833] text-white text-xs font-bold transition-all shadow-lg shadow-[#FF6B1A]/25 flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-[#FF6B1A] hover:bg-[#FF8833] text-white text-xs font-bold transition-all shadow-lg shadow-[#FF6B1A]/25 flex items-center gap-1.5 cursor-pointer"
             >
-              <span>Launch with Form Checker</span>
+              <span>Launch with form checker</span>
               <ChevronRight className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-2 text-xs text-[var(--muted)] px-3 py-1.5 rounded-xl bg-white/5 border border-white/5">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>100% In-Browser • Zero Audio Data Sent to Cloud</span>
+              <span>In-browser audio synthesis • zero audio transmitted</span>
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@ export const VoiceCoachPage: React.FC = () => {
       <div>
         <h2 className="text-lg font-bold text-[var(--text)] mb-3 flex items-center gap-2">
           <Sliders className="w-4 h-4 text-[#FF6B1A]" />
-          <span>Live Audio Controls & Metronome</span>
+          <span>Live audio controls and metronome</span>
         </h2>
         <VoiceCoachHUD />
       </div>
@@ -126,14 +126,14 @@ export const VoiceCoachPage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FF6B1A]/10 text-[11px] font-bold text-[#FF6B1A] border border-[#FF6B1A]/20 mb-1">
               <Languages className="w-3 h-3" />
-              <span>MULTILINGUAL BIOMECHANICS • தமிழ் • ଓଡ଼ିଆ • HINDI • ENGLISH</span>
+              <span>Multilingual biomechanics • தமிழ் • ଓଡ଼ିଆ • Hindi • English</span>
             </div>
             <h2 className="text-xl font-bold text-[var(--text)] flex items-center gap-2">
               <Compass className="w-5 h-5 text-[#FF6B1A]" />
-              <span>Biomechanical Setup & Joint Angles Guide</span>
+              <span>Biomechanical setup and joint angles guide</span>
             </h2>
             <p className="text-xs text-[var(--muted)] mt-0.5">
-              Detailed explainative angle cues for leg press (45°), squats (parallel 90°), elbows, and spine — with native Tamil (தமிழ்), Odia (ଓଡ଼ିଆ), Hindi, and English voice synthesis.
+              Angle cues for leg press (45°), squats (parallel 90°), elbows, and spine with native Tamil (தமிழ்), Odia (ଓଡ଼ିଆ), Hindi, and English synthesis.
             </p>
           </div>
         </div>
@@ -277,19 +277,19 @@ export const VoiceCoachPage: React.FC = () => {
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FF6B1A]/10 text-[11px] font-bold text-[#FF6B1A] border border-[#FF6B1A]/20 mb-1">
               <Dumbbell className="w-3 h-3" />
-              <span>ALL 60 GYM EXERCISES • MULTILINGUAL AUDIO LIBRARY</span>
+              <span>Exercise audio library • 60 movements</span>
             </div>
             <h2 className="text-xl font-bold text-[var(--text)] flex items-center gap-2">
               <Volume2 className="w-5 h-5 text-[#FF6B1A]" />
-              <span>Search All Exercises & Audition Voice Cues</span>
+              <span>Search exercises and preview voice cues</span>
             </h2>
             <p className="text-xs text-[var(--muted)] mt-0.5">
-              Browse any movement across legs, chest, back, shoulders, arms, and core. Listen to real-time voice cues in Tamil (தமிழ்), Odia (ଓଡ଼ିଆ), Hindi, and English.
+              Browse movements across legs, chest, back, shoulders, arms, and core. Voice cues synthesized in Tamil, Odia, Hindi, and English.
             </p>
           </div>
           <div className="text-xs text-[var(--muted)] px-3 py-1.5 rounded-xl bg-white/5 border border-white/5 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span>Active Voice: {voiceCoach.getLanguageOption(voiceCoach.getSettings().language).flag} {voiceCoach.getLanguageOption(voiceCoach.getSettings().language).name} ({voiceCoach.getLanguageOption(voiceCoach.getSettings().language).nativeName})</span>
+            <span>Active voice: {voiceCoach.getLanguageOption(voiceCoach.getSettings().language).name} ({voiceCoach.getLanguageOption(voiceCoach.getSettings().language).nativeName})</span>
           </div>
         </div>
 
@@ -300,7 +300,7 @@ export const VoiceCoachPage: React.FC = () => {
             <Search className="w-4 h-4 text-[var(--muted)] absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search exercises by name, muscle, equipment, or cue (e.g. Leg Press, Squat, Bench, Lat Pulldown, Curl)..."
+              placeholder="Search by name, muscle, equipment, or cue (e.g. Leg Press, Squat, Bench, Lat Pulldown)..."
               value={exerciseSearch}
               onChange={(e) => setExerciseSearch(e.target.value)}
               className="w-full pl-9 pr-8 py-2 rounded-xl bg-black/40 border border-white/10 text-xs text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:border-[#FF6B1A]"
@@ -322,20 +322,20 @@ export const VoiceCoachPage: React.FC = () => {
               <Filter className="w-3 h-3 text-[#FF6B1A]" /> Muscle:
             </span>
             {[
-              { id: 'all', label: 'All Muscles' },
+              { id: 'all', label: 'All muscles' },
               { id: 'legs', label: 'Legs' },
               { id: 'chest', label: 'Chest' },
               { id: 'back', label: 'Back' },
               { id: 'shoulders', label: 'Shoulders' },
               { id: 'arms', label: 'Arms' },
               { id: 'core', label: 'Core' },
-              { id: 'full_body', label: 'Full Body' },
+              { id: 'full_body', label: 'Full body' },
             ].map((m) => (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => setSelectedMuscle(m.id)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   selectedMuscle === m.id
                     ? 'bg-[#FF6B1A] text-white font-bold shadow-md shadow-[#FF6B1A]/25'
                     : 'bg-white/5 hover:bg-white/10 text-[var(--muted)] hover:text-[var(--text)] border border-white/5'
@@ -352,7 +352,7 @@ export const VoiceCoachPage: React.FC = () => {
               Equipment:
             </span>
             {[
-              { id: 'all', label: 'All Equipment' },
+              { id: 'all', label: 'All equipment' },
               { id: 'barbell', label: 'Barbell' },
               { id: 'dumbbell', label: 'Dumbbell' },
               { id: 'machine', label: 'Machine' },
@@ -363,7 +363,7 @@ export const VoiceCoachPage: React.FC = () => {
                 key={eq.id}
                 type="button"
                 onClick={() => setSelectedEquipment(eq.id)}
-                className={`px-2 py-0.5 rounded-md text-[11px] transition-all ${
+                className={`px-2 py-0.5 rounded-md text-[11px] transition-all cursor-pointer ${
                   selectedEquipment === eq.id
                     ? 'bg-white/20 text-white font-bold border border-white/30'
                     : 'bg-white/[0.03] hover:bg-white/10 text-[var(--muted)] border border-white/5'
@@ -403,9 +403,9 @@ export const VoiceCoachPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setVisibleLimit(visibleLimit >= filtered.length ? 12 : filtered.length)}
-                    className="text-xs text-[#FF6B1A] hover:underline font-bold"
+                    className="text-xs text-[#FF6B1A] hover:underline font-bold cursor-pointer"
                   >
-                    {visibleLimit >= filtered.length ? 'Show Less' : `Show All (${filtered.length})`}
+                    {visibleLimit >= filtered.length ? 'Show less' : `Show all (${filtered.length})`}
                   </button>
                 )}
               </div>
@@ -422,9 +422,9 @@ export const VoiceCoachPage: React.FC = () => {
                       setSelectedMuscle('all');
                       setSelectedEquipment('all');
                     }}
-                    className="mt-3 px-3 py-1.5 rounded-lg bg-[#FF6B1A] text-white text-xs font-bold"
+                    className="mt-3 px-3 py-1.5 rounded-lg bg-[#FF6B1A] text-white text-xs font-bold cursor-pointer"
                   >
-                    Reset Filters
+                    Reset filters
                   </button>
                 </div>
               ) : (
@@ -448,8 +448,8 @@ export const VoiceCoachPage: React.FC = () => {
                           {ex.name}
                         </h3>
 
-                        <p className="text-xs text-[var(--muted)] leading-relaxed italic mb-3">
-                          "{ex.shortCueText}"
+                        <p className="text-xs text-[var(--muted)] leading-relaxed mb-3">
+                          {ex.shortCueText}
                         </p>
                       </div>
 
@@ -460,12 +460,12 @@ export const VoiceCoachPage: React.FC = () => {
                           onClick={() => {
                             voiceCoach.speakExerciseVoiceCue(ex);
                             const lang = voiceCoach.getLanguageOption(voiceCoach.getSettings().language);
-                            showToast(`Auditioning ${ex.name} (${lang.name})`, 'info');
+                            showToast(`Playing cue: ${ex.name} (${lang.name})`, 'info');
                           }}
-                          className="w-full py-1.5 px-2 rounded-xl bg-[#FF6B1A]/10 hover:bg-[#FF6B1A] text-[#FF6B1A] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-[#FF6B1A]/20"
+                          className="w-full py-1.5 px-2 rounded-xl bg-[#FF6B1A]/10 hover:bg-[#FF6B1A] text-[#FF6B1A] hover:text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-[#FF6B1A]/20 cursor-pointer"
                         >
                           <Volume2 className="w-3.5 h-3.5" />
-                          <span>Audition ({voiceCoach.getLanguageOption(voiceCoach.getSettings().language).nativeName})</span>
+                          <span>Play cue ({voiceCoach.getLanguageOption(voiceCoach.getSettings().language).nativeName})</span>
                         </button>
 
                         {/* Quick Language Chips (Tamil, Odia, Hindi, English) */}

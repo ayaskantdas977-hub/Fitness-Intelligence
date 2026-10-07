@@ -123,21 +123,21 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
             <span className="p-1.5 rounded-lg bg-[#FF6B1A]/15 text-[#FF6B1A]">
               <Sparkles className="w-4 h-4" />
             </span>
-            <h3 className="text-base font-bold text-[var(--text)]">Volumetric Plate Macro Estimation</h3>
+            <h3 className="text-base font-bold text-[var(--text)]">Volumetric plate macro estimation</h3>
             {initialResult.isDemo ? (
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-[#FF6B1A]/20 text-[#FF6B1A] border border-[#FF6B1A]/30">
-                Demo Result • AI Not Connected
+                Demo result • local estimates
               </span>
             ) : (
               <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1 font-mono">
                 <Sparkles className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                Google Gemini Vision Verified
+                Google Gemini Vision analysis
               </span>
             )}
           </div>
           <p className="text-xs text-[var(--muted)] mt-1 flex items-center gap-1.5">
             <Info className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-            <span>Volumetric food geometry calibrated against USDA FoodData Central & ISSN sports nutrition</span>
+            <span>Portion geometry calibrated against USDA FoodData Central reference values</span>
           </p>
         </div>
 
@@ -215,13 +215,13 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
               </button>
             </div>
 
-            {/* Portion Control: Direct Gram Input + Quick Presets + 1g Precision Slider */}
+            {/* Portion Control: Direct Gram Input + Quick Presets + Slider */}
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-[var(--muted)] font-medium flex items-center gap-1.5">
-                  <span>Portion Weight:</span>
+                  <span>Portion weight</span>
                   <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-mono bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">
-                    Exact Gram Precision
+                    Estimated grams
                   </span>
                 </span>
                 {/* Direct Number Input */}
@@ -237,13 +237,13 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
                       if (!isNaN(val)) handlePortionChange(idx, val);
                     }}
                     className="w-14 text-right bg-transparent font-bold text-sm tabular-nums text-[var(--text)] focus:outline-none"
-                    aria-label={`Exact gram weight for ${item.name}`}
+                    aria-label={`Portion weight for ${item.name}`}
                   />
                   <span className="text-xs font-bold text-[#FF6B1A]">g</span>
                 </div>
               </div>
 
-              {/* 1g Precision Slider */}
+              {/* Precision Slider */}
               <input
                 type="range"
                 min="10"
@@ -293,9 +293,9 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
               </div>
             </div>
 
-            {/* Editable Macro Chips */}
-            <div className="grid grid-cols-4 gap-2 pt-1 text-center">
-              <div className="bg-[var(--surface)] p-2 rounded-lg border border-[var(--border)]">
+            {/* Editable Macro Row (Flattened Divider Strip) */}
+            <div className="grid grid-cols-4 border-t border-b border-[var(--border)] py-2 text-center bg-[var(--surface)] rounded-xl">
+              <div className="border-r border-[var(--border)] px-1">
                 <span className="text-[10px] uppercase text-[var(--muted)] block">Calories</span>
                 <input
                   type="number"
@@ -307,7 +307,7 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
                 />
               </div>
 
-              <div className="bg-[var(--surface)] p-2 rounded-lg border border-[var(--border)]">
+              <div className="border-r border-[var(--border)] px-1">
                 <span className="text-[10px] uppercase text-[var(--muted)] block">Protein (g)</span>
                 <input
                   type="number"
@@ -319,7 +319,7 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
                 />
               </div>
 
-              <div className="bg-[var(--surface)] p-2 rounded-lg border border-[var(--border)]">
+              <div className="border-r border-[var(--border)] px-1">
                 <span className="text-[10px] uppercase text-[var(--muted)] block">Carbs (g)</span>
                 <input
                   type="number"
@@ -331,7 +331,7 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
                 />
               </div>
 
-              <div className="bg-[var(--surface)] p-2 rounded-lg border border-[var(--border)]">
+              <div className="px-1">
                 <span className="text-[10px] uppercase text-[var(--muted)] block">Fat (g)</span>
                 <input
                   type="number"
@@ -353,7 +353,7 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
             className="w-full py-3 border border-dashed border-[var(--border)] hover:border-black/30 dark:hover:border-white/30 rounded-xl text-xs font-semibold text-[var(--muted)] hover:text-[var(--text)] transition-colors cursor-pointer min-h-[44px] flex items-center justify-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
-            <span>Add Missing Food via Search</span>
+            <span>Add missing food via search</span>
           </button>
         )}
       </div>
@@ -361,7 +361,7 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
       {/* Plate Total Summary */}
       <div className="p-4 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-between text-xs">
         <div>
-          <span className="text-[var(--muted)] block">Total Plate Macros</span>
+          <span className="text-[var(--muted)] block">Total plate macros</span>
           <span className="font-bold text-base text-[var(--text)] tabular-nums">
             {totalKcal} kcal
           </span>
@@ -395,7 +395,7 @@ export const FoodResultCard: React.FC<FoodResultCardProps> = ({
           disabled={items.length === 0}
         >
           <Check className="w-4 h-4 stroke-[3]" />
-          <span>Confirm & Log to {mealType}</span>
+          <span>Confirm and log to {mealType}</span>
         </Button>
       </div>
     </div>

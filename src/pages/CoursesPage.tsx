@@ -2,11 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Search,
   Star,
-  Shield,
-  Dumbbell,
-  Flame,
-  Activity,
-  Zap,
   Sparkles,
   CheckCircle2,
   Lock,
@@ -24,6 +19,7 @@ import {
   PlayCircle,
   FileText,
   UserCheck,
+  Video,
 } from 'lucide-react';
 import { COURSES_CATALOG, type Course } from '../data/coursesData';
 import { useToast } from '../context/ToastContext';
@@ -34,8 +30,8 @@ export const CoursesPage: React.FC = () => {
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [priceFilter, setPriceFilter] = useState<'all' | 'under1000' | 'around1500' | 'under2000'>('all');
-  const [maxPriceRange, setMaxPriceRange] = useState<number>(3500);
+  const [priceFilter, setPriceFilter] = useState<'all' | 'around1500' | 'under3000' | 'midrange' | 'premium'>('all');
+  const [maxPriceRange, setMaxPriceRange] = useState<number>(40000);
   const [minRating, setMinRating] = useState<number>(0);
   const [sortBy, setSortBy] = useState<'popular' | 'rating' | 'price_low' | 'price_high'>('popular');
   const [activeTab, setActiveTab] = useState<'catalog' | 'my_courses'>('catalog');
@@ -78,7 +74,7 @@ export const CoursesPage: React.FC = () => {
         return false;
       }
 
-      // Keyword search (title, subtitle, instructor, category)
+      // Keyword search (title, subtitle, instructor, channel name, youtube handle, category)
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matches =
@@ -87,14 +83,18 @@ export const CoursesPage: React.FC = () => {
           course.instructor.name.toLowerCase().includes(q) ||
           course.categoryLabel.toLowerCase().includes(q) ||
           course.bestFor.toLowerCase().includes(q) ||
-          (q === '1500' && (course.priceInr === 1500 || course.priceInr === 1499));
+          course.channelInfo.channelName.toLowerCase().includes(q) ||
+          course.channelInfo.youtubeHandle.toLowerCase().includes(q) ||
+          (q === '1500' && (course.priceInr === 1500 || course.priceInr === 1499)) ||
+          (q.includes('30000') && course.priceInr >= 29000);
         if (!matches) return false;
       }
 
       // Preset Price Filters
-      if (priceFilter === 'under1000' && course.priceInr >= 1000) return false;
       if (priceFilter === 'around1500' && (course.priceInr < 1400 || course.priceInr > 1600)) return false;
-      if (priceFilter === 'under2000' && course.priceInr >= 2000) return false;
+      if (priceFilter === 'under3000' && course.priceInr > 3000) return false;
+      if (priceFilter === 'midrange' && (course.priceInr < 3000 || course.priceInr > 15000)) return false;
+      if (priceFilter === 'premium' && course.priceInr < 20000) return false;
 
       // Price slider
       if (course.priceInr > maxPriceRange) return false;
@@ -131,27 +131,9 @@ export const CoursesPage: React.FC = () => {
     }, 1200);
   };
 
-  const getLogoIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'dumbbell':
-        return <Dumbbell className="w-6 h-6 text-white" />;
-      case 'shield':
-        return <Shield className="w-6 h-6 text-white" />;
-      case 'flame':
-        return <Flame className="w-6 h-6 text-white" />;
-      case 'activity':
-        return <Activity className="w-6 h-6 text-white" />;
-      case 'zap':
-        return <Zap className="w-6 h-6 text-white" />;
-      case 'sparkles':
-      default:
-        return <Sparkles className="w-6 h-6 text-white" />;
-    }
-  };
-
   return (
     <div className="space-y-8 pb-16 max-w-7xl mx-auto">
-      {/* Top Udemy-Style Hero Header */}
+      {/* Top Hero Header: Academy & Creator Masterclasses */}
       <div className="rounded-3xl bg-gradient-to-r from-[#0F0B09] via-[#1F140E] to-[#0F0B09] border border-[#FF6B1A]/30 p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
         {/* Subtle decorative glow */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#FF6B1A]/10 rounded-full blur-3xl pointer-events-none" />
@@ -159,17 +141,18 @@ export const CoursesPage: React.FC = () => {
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FF6B1A]/20 border border-[#FF6B1A]/40 text-[#FFB547] text-xs font-bold uppercase tracking-wider">
             <Award className="w-3.5 h-3.5 text-[#FF6B1A]" />
-            <span>Fitness Intelligence Academy • Udemy-Style Masterclasses</span>
+            <span>Fitness Intelligence Academy • Creator Masterclasses & Elite Mentorships</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
-            New to Fitness? Learn from Certified CSCS Coaches & Clinical Physiotherapists.
+            Learn from India & Global Top Fitness Creators & Biomechanics Experts.
           </h1>
 
           <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-2xl">
-            If you or someone you know doesn't know where to start, our structured masterclasses teach
-            everything from absolute zero: safe machine setup, pain-free biomechanics, personalized calorie
-            counting, and direct 1-on-1 coach contact via WhatsApp.
+            Access authentic masterclasses and personal mentorships from verified educators like{' '}
+            <strong>Jeet Selal (Himalayan Stallion)</strong>, <strong>Guru Mann</strong>,{' '}
+            <strong>Dr. Mike Israetel (RP Strength)</strong>, and certified clinicians. From ₹1,499 budget fundamentals
+            to ₹30,000+ elite 1-on-1 mentorship programs and internationally recognized trainer diplomas.
           </p>
 
           {/* Quick tab switcher: Browse Catalog vs My Enrolled Courses */}
@@ -208,29 +191,30 @@ export const CoursesPage: React.FC = () => {
           {/* Search, Price & Category Toolbar */}
           <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 space-y-4 shadow-sm">
             {/* Row 1: Search Bar & Preset Price Filters */}
-            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
               {/* Search Bar */}
               <div className="relative flex-1">
                 <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
                 <input
                   type="text"
-                  placeholder="Search courses by keyword, instructor, or '1500'..."
+                  placeholder="Search by creator (Jeet Selal, Guru Mann), topic, or '1500' / '30000'..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 bg-[var(--surface-2)] border border-[var(--border)] rounded-xl text-xs sm:text-sm text-[var(--text)] placeholder-[var(--muted)]/60 focus:outline-none focus:border-[#FF6B1A] transition-colors"
                 />
               </div>
 
-              {/* Price Filter Pills (including dedicated ₹1,500 filter) */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+              {/* Price Filter Pills (including sweet-spot ₹1,500 and ₹30,000+ elite) */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
                 <span className="text-[11px] font-bold text-[var(--muted)] uppercase tracking-wider mr-1 shrink-0">
                   Price:
                 </span>
                 {[
                   { id: 'all', label: 'All Prices' },
-                  { id: 'under1000', label: 'Under ₹1,000' },
-                  { id: 'around1500', label: '⭐ Around ₹1,500 (Best Value)' },
-                  { id: 'under2000', label: 'Under ₹2,000' },
+                  { id: 'around1500', label: '⭐ Around ₹1,500 (Budget Sweet Spot)' },
+                  { id: 'under3000', label: 'Under ₹3,000' },
+                  { id: 'midrange', label: '₹3,000 – ₹15,000' },
+                  { id: 'premium', label: '👑 ₹20,000 – ₹35,000+ (Elite Mentorship)' },
                 ].map((pf) => (
                   <button
                     key={pf.id}
@@ -255,11 +239,12 @@ export const CoursesPage: React.FC = () => {
               </span>
               {[
                 { id: 'all', label: 'All Categories' },
-                { id: 'beginner', label: 'Beginner Fundamentals' },
-                { id: 'biomechanics', label: 'Joint & Spine Safety' },
+                { id: 'hypertrophy', label: 'Natural Hypertrophy' },
+                { id: 'mentorship', label: '1-on-1 Mentorship' },
+                { id: 'biomechanics', label: 'Biomechanics & Certifications' },
                 { id: 'nutrition', label: 'Nutrition & Fat Loss' },
                 { id: 'calisthenics', label: 'Home Calisthenics' },
-                { id: 'hypertrophy', label: 'Hypertrophy Science' },
+                { id: 'beginner', label: 'Beginner Gym' },
                 { id: 'female_fitness', label: 'Female Health & Strength' },
               ].map((cat) => (
                 <button
@@ -280,18 +265,18 @@ export const CoursesPage: React.FC = () => {
             {/* Row 3: Advanced Sliders & Sort */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2 border-t border-[var(--border)] text-xs text-[var(--muted)]">
               <div className="flex items-center gap-4 flex-wrap">
-                {/* Max Price Range Slider */}
+                {/* Max Price Range Slider spanning up to ₹40,000 */}
                 <div className="flex items-center gap-2">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-[#FF6B1A]" />
-                  <span>Max Budget: <strong>₹{maxPriceRange}</strong></span>
+                  <span>Max Budget: <strong>₹{maxPriceRange.toLocaleString()}</strong></span>
                   <input
                     type="range"
-                    min="500"
-                    max="3500"
-                    step="100"
+                    min="1000"
+                    max="40000"
+                    step="500"
                     value={maxPriceRange}
                     onChange={(e) => setMaxPriceRange(Number(e.target.value))}
-                    className="accent-[#FF6B1A] w-24 sm:w-32 cursor-pointer"
+                    className="accent-[#FF6B1A] w-28 sm:w-36 cursor-pointer"
                   />
                 </div>
 
@@ -304,8 +289,8 @@ export const CoursesPage: React.FC = () => {
                     className="bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] rounded-lg px-2 py-1 text-xs focus:outline-none"
                   >
                     <option value={0}>All Ratings</option>
-                    <option value={4.5}>4.5★ and above</option>
                     <option value={4.8}>4.8★ and above</option>
+                    <option value={4.9}>4.9★ and above</option>
                   </select>
                 </div>
               </div>
@@ -319,9 +304,9 @@ export const CoursesPage: React.FC = () => {
                   className="bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] rounded-lg px-2.5 py-1 text-xs focus:outline-none font-medium"
                 >
                   <option value="popular">Most Popular (Enrolled)</option>
-                  <option value="rating">Highest Rated (4.8 - 4.9★)</option>
-                  <option value="price_low">Price: Low to High</option>
-                  <option value="price_high">Price: High to Low</option>
+                  <option value="rating">Highest Rated (4.8 - 5.0★)</option>
+                  <option value="price_low">Price: Low to High (₹1,499+)</option>
+                  <option value="price_high">Price: High to Low (₹34,500+)</option>
                 </select>
               </div>
             </div>
@@ -331,35 +316,79 @@ export const CoursesPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course) => {
               const isEnrolled = enrolledCourseIds.includes(course.id);
+              const isHighTicket = course.priceInr >= 20000;
 
               return (
                 <div
                   key={course.id}
-                  className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden shadow-sm hover:shadow-md hover:border-[#FF6B1A]/40 transition-all flex flex-col justify-between group"
+                  className={`rounded-2xl border ${
+                    isHighTicket
+                      ? 'border-amber-500/40 bg-gradient-to-b from-[var(--surface)] to-amber-950/10 shadow-md'
+                      : 'border-[var(--border)] bg-[var(--surface)] shadow-sm'
+                  } overflow-hidden hover:shadow-xl hover:border-[#FF6B1A]/50 transition-all flex flex-col justify-between group`}
                 >
-                  {/* Top Thumbnail & Logo Banner */}
-                  <div className="relative p-5 bg-gradient-to-br from-black/80 via-zinc-900 to-black text-white overflow-hidden">
-                    <div className="flex items-start justify-between gap-3 relative z-10">
-                      {/* Logo Icon Badge */}
-                      <div
-                        className={`w-12 h-12 rounded-2xl bg-gradient-to-tr ${course.logoBadge.gradient} flex items-center justify-center shadow-lg`}
-                      >
-                        {getLogoIcon(course.logoBadge.iconName)}
+                  {/* Top Photographic Media Banner with Real Channel Logo & Badges */}
+                  <div className="relative h-48 w-full bg-zinc-950 overflow-hidden">
+                    <img
+                      src={course.thumbnailUrl}
+                      alt={course.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      loading="lazy"
+                    />
+
+                    {/* Gradient Overlays for Readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/45 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-transparent" />
+
+                    {/* Top Row: Channel Badge & Category/Level Badges */}
+                    <div className="absolute top-3 left-3 right-3 flex items-start justify-between gap-2 z-10">
+                      {/* Real Channel Avatar & Name */}
+                      <div className="flex items-center gap-2 bg-black/75 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/20 shadow-lg">
+                        <img
+                          src={course.channelInfo.channelAvatar}
+                          alt={course.channelInfo.channelName}
+                          className="w-7 h-7 rounded-full object-cover border border-white/70 shadow-sm shrink-0"
+                        />
+                        <div className="flex flex-col leading-tight pr-1">
+                          <span className="text-[11px] font-bold text-white flex items-center gap-1">
+                            {course.channelInfo.channelName}
+                            {course.channelInfo.verified && (
+                              <CheckCircle2 className="w-3 h-3 text-[#38BDF8] fill-[#38BDF8]" />
+                            )}
+                          </span>
+                          <span className="text-[9px] text-zinc-300 font-medium">
+                            {course.channelInfo.subscribers}
+                          </span>
+                        </div>
                       </div>
 
+                      {/* Prestige / Category Badges */}
                       <div className="flex flex-col items-end gap-1">
-                        <span className="px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-white">
-                          {course.categoryLabel}
-                        </span>
-                        <span className="text-[10px] text-zinc-300 font-medium">
+                        {isHighTicket ? (
+                          <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 text-black text-[9px] font-black uppercase tracking-wider shadow-lg border border-amber-300 flex items-center gap-1">
+                            <Sparkles className="w-2.5 h-2.5 text-black fill-black" />
+                            ELITE PRO
+                          </span>
+                        ) : (
+                          <span className="px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-white border border-white/10">
+                            {course.categoryLabel}
+                          </span>
+                        )}
+                        <span className="px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-md text-[9px] text-zinc-200 font-medium">
                           {course.level}
                         </span>
                       </div>
                     </div>
 
-                    <h3 className="mt-4 text-base font-bold text-white group-hover:text-[#FFB547] transition-colors line-clamp-2">
-                      {course.title}
-                    </h3>
+                    {/* Bottom Course Title inside Banner */}
+                    <div className="absolute bottom-3 left-3 right-3 z-10">
+                      <span className="text-[10px] font-bold text-[#FFB547] block mb-0.5">
+                        {course.channelInfo.youtubeHandle}
+                      </span>
+                      <h3 className="text-sm sm:text-base font-bold text-white leading-snug group-hover:text-[#FFB547] transition-colors line-clamp-2 drop-shadow-md">
+                        {course.title}
+                      </h3>
+                    </div>
                   </div>
 
                   {/* Body Details */}
@@ -374,9 +403,9 @@ export const CoursesPage: React.FC = () => {
                       <img
                         src={course.instructor.avatar}
                         alt={course.instructor.name}
-                        className="w-8 h-8 rounded-full object-cover border border-[#FF6B1A]/40"
+                        className="w-8 h-8 rounded-full object-cover border border-[#FF6B1A]/40 shrink-0"
                       />
-                      <div className="truncate">
+                      <div className="truncate flex-1">
                         <span className="text-xs font-bold text-[var(--text)] block truncate flex items-center gap-1">
                           {course.instructor.name}
                           <UserCheck className="w-3 h-3 text-[#FF6B1A]" />
@@ -416,12 +445,31 @@ export const CoursesPage: React.FC = () => {
                     </div>
 
                     {/* Direct Contact Teaser Badge */}
-                    <div className="px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold flex items-center justify-between">
-                      <span className="flex items-center gap-1.5">
-                        <MessageCircle className="w-3.5 h-3.5 text-emerald-500" />
-                        Direct WhatsApp Coach Support
+                    <div
+                      className={`px-3 py-1.5 rounded-xl ${
+                        isHighTicket
+                          ? 'bg-amber-500/10 border border-amber-500/30 text-amber-700 dark:text-amber-300'
+                          : 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                      } text-[11px] font-semibold flex items-center justify-between`}
+                    >
+                      <span className="flex items-center gap-1.5 truncate">
+                        {isHighTicket ? (
+                          <>
+                            <Video className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                            <span className="truncate">VIP 1-on-1 Zoom Calls & WhatsApp Hotline</span>
+                          </>
+                        ) : (
+                          <>
+                            <MessageCircle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                            <span className="truncate">Direct WhatsApp Coach Support</span>
+                          </>
+                        )}
                       </span>
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold uppercase">
+                      <span
+                        className={`text-[10px] font-bold uppercase shrink-0 ${
+                          isHighTicket ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'
+                        }`}
+                      >
                         Included
                       </span>
                     </div>
@@ -430,7 +478,11 @@ export const CoursesPage: React.FC = () => {
                     <div className="pt-3 border-t border-[var(--border)] flex items-center justify-between gap-3">
                       <div>
                         <div className="flex items-baseline gap-1.5">
-                          <span className="text-xl font-extrabold text-[var(--text)] tabular-nums">
+                          <span
+                            className={`text-xl font-extrabold tabular-nums ${
+                              isHighTicket ? 'text-amber-600 dark:text-amber-400' : 'text-[var(--text)]'
+                            }`}
+                          >
                             ₹{course.priceInr.toLocaleString()}
                           </span>
                           <span className="text-xs text-[var(--muted)] line-through">
@@ -464,9 +516,13 @@ export const CoursesPage: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setSelectedCourseForPayment(course)}
-                            className="px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#FF6B1A] to-[#FF8833] text-white shadow-md shadow-[#FF6B1A]/20 hover:brightness-110 active:scale-95 transition cursor-pointer"
+                            className={`px-4 py-2 rounded-xl text-xs font-bold text-white shadow-md active:scale-95 transition cursor-pointer ${
+                              isHighTicket
+                                ? 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 shadow-amber-500/20 hover:brightness-110'
+                                : 'bg-gradient-to-r from-[#FF6B1A] to-[#FF8833] shadow-[#FF6B1A]/20 hover:brightness-110'
+                            }`}
                           >
-                            Buy Course
+                            {isHighTicket ? 'Enroll VIP' : 'Buy Course'}
                           </button>
                         )}
                       </div>
@@ -480,9 +536,9 @@ export const CoursesPage: React.FC = () => {
           {filteredCourses.length === 0 && (
             <div className="text-center py-12 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 space-y-3">
               <BookOpen className="w-10 h-10 text-[var(--muted)] mx-auto" />
-              <h4 className="text-base font-bold text-[var(--text)]">No courses found matching your criteria</h4>
+              <h4 className="text-base font-bold text-[var(--text)]">No masterclasses found matching your criteria</h4>
               <p className="text-xs text-[var(--muted)] max-w-sm mx-auto">
-                Try clearing your search query or selecting "All Prices" to see available masterclasses.
+                Try searching for "Jeet Selal", "Guru Mann", or selecting "All Prices" to explore the full catalog.
               </p>
               <button
                 type="button"
@@ -490,7 +546,7 @@ export const CoursesPage: React.FC = () => {
                   setSearchQuery('');
                   setSelectedCategory('all');
                   setPriceFilter('all');
-                  setMaxPriceRange(3500);
+                  setMaxPriceRange(40000);
                   setMinRating(0);
                 }}
                 className="px-4 py-2 rounded-xl bg-[#FF6B1A] text-white font-bold text-xs cursor-pointer shadow-md"
@@ -524,8 +580,8 @@ export const CoursesPage: React.FC = () => {
               <Award className="w-12 h-12 text-[#FF6B1A] mx-auto opacity-70" />
               <h3 className="text-base font-bold text-[var(--text)]">You haven't enrolled in any courses yet</h3>
               <p className="text-xs text-[var(--muted)] max-w-md mx-auto leading-relaxed">
-                If you are new to fitness, check out our best-selling "Zero to Hero: Beginner Gym Blueprint"
-                or "Spine-Safe Biomechanics Masterclass" priced around ₹1,499.
+                If you are new to fitness, check out our best-selling masterclasses from Jeet Selal, Guru Mann, or Yash Sharma
+                priced around ₹1,499.
               </p>
               <button
                 type="button"
@@ -544,16 +600,19 @@ export const CoursesPage: React.FC = () => {
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div
-                        className={`w-12 h-12 rounded-xl bg-gradient-to-tr ${course.logoBadge.gradient} flex items-center justify-center text-white shrink-0 shadow-md`}
-                      >
-                        {getLogoIcon(course.logoBadge.iconName)}
-                      </div>
+                      <img
+                        src={course.thumbnailUrl}
+                        alt={course.title}
+                        className="w-14 h-14 rounded-xl object-cover border border-[var(--border)] shrink-0 shadow-md"
+                      />
                       <div>
-                        <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
-                          ✓ Enrolled & Active
-                        </span>
-                        <h4 className="text-sm font-bold text-[var(--text)] leading-snug">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
+                            ✓ Enrolled & Active
+                          </span>
+                          <span className="text-[10px] text-[var(--muted)]">• {course.channelInfo.channelName}</span>
+                        </div>
+                        <h4 className="text-sm font-bold text-[var(--text)] leading-snug line-clamp-1">
                           {course.title}
                         </h4>
                       </div>
@@ -578,7 +637,7 @@ export const CoursesPage: React.FC = () => {
                         <img
                           src={course.instructor.avatar}
                           alt={course.instructor.name}
-                          className="w-7 h-7 rounded-full object-cover"
+                          className="w-7 h-7 rounded-full object-cover border border-[#FF6B1A]/50"
                         />
                         <span className="text-xs font-bold text-[var(--text)]">
                           {course.instructor.name}
@@ -646,38 +705,65 @@ export const CoursesPage: React.FC = () => {
 
       {/* Course Curriculum & Instructor Details Modal */}
       {selectedCourseForDetail && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
           <div className="relative w-full max-w-2xl max-h-[90vh] bg-[var(--surface)] border border-[var(--border)] rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-            {/* Modal Header */}
-            <div className="p-6 bg-gradient-to-r from-black/90 to-zinc-900 text-white relative">
+            {/* Modal Header with Course Cover Banner & Channel Logo */}
+            <div className="relative p-6 bg-zinc-950 text-white overflow-hidden">
+              <img
+                src={selectedCourseForDetail.thumbnailUrl}
+                alt={selectedCourseForDetail.title}
+                className="absolute inset-0 w-full h-full object-cover opacity-25"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent" />
+
               <button
                 type="button"
                 onClick={() => setSelectedCourseForDetail(null)}
-                className="absolute top-4 right-4 p-2 text-zinc-400 hover:text-white rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
+                className="absolute top-4 right-4 z-20 p-2 text-zinc-400 hover:text-white rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
 
-              <div className="flex items-center gap-2 text-xs font-bold text-[#FFB547] uppercase tracking-wider mb-2">
-                <span>{selectedCourseForDetail.categoryLabel}</span>
-                <span>•</span>
-                <span>{selectedCourseForDetail.level}</span>
-              </div>
+              <div className="relative z-10 space-y-3">
+                {/* Creator Channel Tag */}
+                <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 w-fit">
+                  <img
+                    src={selectedCourseForDetail.channelInfo.channelAvatar}
+                    alt={selectedCourseForDetail.channelInfo.channelName}
+                    className="w-5 h-5 rounded-full object-cover border border-white/60"
+                  />
+                  <span className="text-xs font-bold text-white flex items-center gap-1">
+                    {selectedCourseForDetail.channelInfo.channelName}
+                    {selectedCourseForDetail.channelInfo.verified && (
+                      <CheckCircle2 className="w-3 h-3 text-[#38BDF8] fill-[#38BDF8]" />
+                    )}
+                  </span>
+                  <span className="text-[10px] text-zinc-300">
+                    • {selectedCourseForDetail.channelInfo.subscribers}
+                  </span>
+                </div>
 
-              <h2 className="text-xl font-bold pr-8">{selectedCourseForDetail.title}</h2>
-              <p className="text-xs text-zinc-300 mt-1 leading-relaxed">
-                {selectedCourseForDetail.subtitle}
-              </p>
+                <div className="flex items-center gap-2 text-xs font-bold text-[#FFB547] uppercase tracking-wider">
+                  <span>{selectedCourseForDetail.categoryLabel}</span>
+                  <span>•</span>
+                  <span>{selectedCourseForDetail.level}</span>
+                </div>
 
-              <div className="flex items-center gap-3 mt-3 text-xs">
-                <span className="flex items-center gap-1 font-bold text-[#FFB547]">
-                  <Star className="w-3.5 h-3.5 fill-[#FFB547]" />
-                  {selectedCourseForDetail.rating.toFixed(1)} ({selectedCourseForDetail.reviewsCount} reviews)
-                </span>
-                <span>•</span>
-                <span>{selectedCourseForDetail.durationTotal}</span>
-                <span>•</span>
-                <span>{selectedCourseForDetail.lessonsCount} lessons</span>
+                <h2 className="text-xl font-bold pr-8 leading-snug">{selectedCourseForDetail.title}</h2>
+                <p className="text-xs text-zinc-300 leading-relaxed">
+                  {selectedCourseForDetail.subtitle}
+                </p>
+
+                <div className="flex items-center gap-3 pt-1 text-xs">
+                  <span className="flex items-center gap-1 font-bold text-[#FFB547]">
+                    <Star className="w-3.5 h-3.5 fill-[#FFB547]" />
+                    {selectedCourseForDetail.rating.toFixed(1)} ({selectedCourseForDetail.reviewsCount} reviews)
+                  </span>
+                  <span>•</span>
+                  <span>{selectedCourseForDetail.durationTotal}</span>
+                  <span>•</span>
+                  <span>{selectedCourseForDetail.lessonsCount} lessons</span>
+                </div>
               </div>
             </div>
 
@@ -856,18 +942,28 @@ export const CoursesPage: React.FC = () => {
               </h3>
             </div>
 
-            {/* Selected Course Summary */}
+            {/* Selected Course Summary with Real Channel Badge */}
             <div className="p-4 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] space-y-2">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-bold text-[var(--text)] line-clamp-1">
-                  {selectedCourseForPayment.title}
-                </h4>
-                <span className="text-sm font-bold text-[#FF6B1A]">
+                <div className="flex items-center gap-2">
+                  <img
+                    src={selectedCourseForPayment.channelInfo.channelAvatar}
+                    alt={selectedCourseForPayment.channelInfo.channelName}
+                    className="w-6 h-6 rounded-full object-cover border border-[var(--border)]"
+                  />
+                  <span className="text-xs font-bold text-[var(--text)]">
+                    {selectedCourseForPayment.channelInfo.channelName}
+                  </span>
+                </div>
+                <span className="text-base font-extrabold text-[#FF6B1A]">
                   ₹{selectedCourseForPayment.priceInr.toLocaleString()}
                 </span>
               </div>
+              <h4 className="text-xs font-bold text-[var(--text)] line-clamp-1">
+                {selectedCourseForPayment.title}
+              </h4>
               <p className="text-[11px] text-[var(--muted)]">
-                Instructor: {selectedCourseForPayment.instructor.name} · Lifetime Access
+                Coach: {selectedCourseForPayment.instructor.name} · Lifetime Access & Support
               </p>
             </div>
 
