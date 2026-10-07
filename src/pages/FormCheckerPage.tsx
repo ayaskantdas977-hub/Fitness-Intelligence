@@ -21,10 +21,13 @@ import {
   MessageSquare,
   X,
   Loader2,
+  Headphones,
 } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { ErrorState } from '../components/ui/ErrorState';
+import { VoiceCoachHUD } from '../components/audio/VoiceCoachHUD';
+import { voiceCoach } from '../services/voiceCoachService';
 import {
   drawPoseSkeleton,
   SquatStateMachine,
@@ -77,6 +80,10 @@ export const FormCheckerPage: React.FC = () => {
   // Finished summary state
   const [summary, setSummary] = useState<FormCheckSummary | null>(null);
 
+  // Voice Coach HUD state
+  const [showVoiceCoachHUD, setShowVoiceCoachHUD] = useState<boolean>(false);
+  const prevRepCountRef = useRef<number>(0);
+
   // Refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -97,6 +104,7 @@ export const FormCheckerPage: React.FC = () => {
       stateMachineRef.current = new BicepsCurlStateMachine();
     }
     setRepCount(0);
+    prevRepCountRef.current = 0;
     setCurrentJointAngle(0);
     setFlags([]);
     setSummary(null);
@@ -299,6 +307,16 @@ export const FormCheckerPage: React.FC = () => {
             setVisibilityWarning(false);
             drawPoseSkeleton(ctx, landmarks, canvas.width, canvas.height, '#FF6B1A');
             const out = machine.processFrame(landmarks, performance.now() / 1000);
+            if (out.repCount > prevRepCountRef.current) {
+              voiceCoach.announceRep(out.repCount);
+              prevRepCountRef.current = out.repCount;
+            }
+            if (machine.flags.length > 0) {
+              const latestFlag = machine.flags[machine.flags.length - 1];
+              if (latestFlag?.ruleCode?.includes('VALGUS')) voiceCoach.announceCorrection('knee_valgus');
+              else if (latestFlag?.ruleCode?.includes('DEPTH')) voiceCoach.announceCorrection('depth_incomplete');
+              else if (latestFlag?.ruleCode?.includes('LEAN')) voiceCoach.announceCorrection('lumbar_flexion');
+            }
             setRepCount(out.repCount);
             if (selectedExercise === 'squat') {
               setCurrentJointAngle((out as any).kneeAngle || 0);
@@ -463,10 +481,14 @@ export const FormCheckerPage: React.FC = () => {
           const estimatedReps = Math.floor(elapsed / 3);
           if (estimatedReps !== simReps && estimatedReps <= 4) {
             simReps = estimatedReps;
+            if (simReps > 0) {
+              voiceCoach.announceRep(simReps);
+            }
             setRepCount(simReps);
 
-            // Add demo flag on 3rd rep
+            // Add demo flag on 2nd rep
             if (simReps === 2 && selectedExercise === 'squat') {
+              voiceCoach.announceCorrection('depth_incomplete');
               setFlags((prev) => [
                 ...prev,
                 {
@@ -617,6 +639,16 @@ export const FormCheckerPage: React.FC = () => {
 
           // Process state machine
           const out = machine.processFrame(landmarks, video.currentTime);
+          if (out.repCount > prevRepCountRef.current) {
+            voiceCoach.announceRep(out.repCount);
+            prevRepCountRef.current = out.repCount;
+          }
+          if (machine.flags.length > 0) {
+            const latestFlag = machine.flags[machine.flags.length - 1];
+            if (latestFlag?.ruleCode?.includes('VALGUS')) voiceCoach.announceCorrection('knee_valgus');
+            else if (latestFlag?.ruleCode?.includes('DEPTH')) voiceCoach.announceCorrection('depth_incomplete');
+            else if (latestFlag?.ruleCode?.includes('LEAN')) voiceCoach.announceCorrection('lumbar_flexion');
+          }
           setRepCount(out.repCount);
           if (selectedExercise === 'squat') {
             setCurrentJointAngle((out as any).kneeAngle || 0);
@@ -654,6 +686,7 @@ export const FormCheckerPage: React.FC = () => {
     setPhotoPreview(null);
     setGeminiAuditResult(null);
     setRepCount(0);
+    prevRepCountRef.current = 0;
     setCurrentJointAngle(0);
     setFlags([]);
     setSummary(null);
@@ -677,32 +710,55 @@ export const FormCheckerPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Exercise Selector Tabs */}
-      <div className="flex items-center gap-2 border-b border-[var(--border)] pb-3">
-        {(
-          [
-            { id: 'squat', label: 'Barbell / Bodyweight Squat' },
-            { id: 'push_up', label: 'Push-Up' },
-            { id: 'biceps_curl', label: 'Dumbbell Biceps Curl' },
-          ] as const
-        ).map((ex) => (
-          <button
-            key={ex.id}
-            type="button"
-            onClick={() => {
-              handleReset();
-              setSelectedExercise(ex.id);
-            }}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer min-h-[44px] ${
-              selectedExercise === ex.id
-                ? 'bg-[#FF6B1A] text-white font-bold'
-                : 'bg-[var(--surface-2)] text-[var(--muted)] hover:text-[var(--text)] border border-[var(--border)]'
-            }`}
-          >
-            {ex.label}
-          </button>
-        ))}
+      {/* Exercise Selector Tabs & Voice Coach Control */}
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--border)] pb-3">
+        <div className="flex flex-wrap items-center gap-2">
+          {(
+            [
+              { id: 'squat', label: 'Barbell / Bodyweight Squat' },
+              { id: 'push_up', label: 'Push-Up' },
+              { id: 'biceps_curl', label: 'Dumbbell Biceps Curl' },
+            ] as const
+          ).map((ex) => (
+            <button
+              key={ex.id}
+              type="button"
+              onClick={() => {
+                handleReset();
+                setSelectedExercise(ex.id);
+              }}
+              className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer min-h-[44px] ${
+                selectedExercise === ex.id
+                  ? 'bg-[#FF6B1A] text-white font-bold'
+                  : 'bg-[var(--surface-2)] text-[var(--muted)] hover:text-[var(--text)] border border-[var(--border)]'
+              }`}
+            >
+              {ex.label}
+            </button>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setShowVoiceCoachHUD(!showVoiceCoachHUD)}
+          className={`px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+            showVoiceCoachHUD || voiceCoach.getSettings().enabled
+              ? 'bg-[#FF6B1A]/10 text-[#FF6B1A] border-[#FF6B1A]/40'
+              : 'bg-[var(--surface-2)] text-[var(--muted)] border-[var(--border)]'
+          }`}
+        >
+          <Headphones className="w-4 h-4 text-[#FF6B1A]" />
+          <span>Voice Coach HUD</span>
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+        </button>
       </div>
+
+      {/* Voice Coach HUD Drawer if expanded */}
+      {showVoiceCoachHUD && (
+        <div className="animate-in fade-in slide-in-from-top-2 duration-200">
+          <VoiceCoachHUD onClose={() => setShowVoiceCoachHUD(false)} />
+        </div>
+      )}
 
       {/* Main Analysis Viewport */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
