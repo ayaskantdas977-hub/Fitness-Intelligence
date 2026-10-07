@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-10-08
+
+### Changed
+- **Design System & Visual Polish**:
+  - Added strict spacing and radius design tokens with zero color changes (verified against 451 locked baseline tokens).
+  - Reworked repetitive card grids into asymmetric, focal-led layouts across landing, dashboard, and voice coach routes.
+  - Flattened nested boxes in macro tracking (`FoodResultCard`), exercise logging, and telemetry panels.
+  - Reduced competing background glows to single focal elements per screen.
+- **Copy & Editorial Standards**:
+  - Rewrote UI copy in plain, human, sentence-case language, removing generic AI buzzwords and formulaic patterns.
+  - Labeled research numbers, sample ratings, and clinical metrics with clear sample data indicators.
+  - Aligned technical claims strictly with codebase capabilities (on-device MediaPipe, USDA calibration).
+- **Navigation & Mobile Responsiveness**:
+  - Added route normalizer in `main.tsx` to eliminate mixed path/hash routing URLs.
+  - Resolved 360px mobile viewport horizontal overflow in the bottom navigation bar.
+
+---
+
 ## [1.2.0] - 2026-10-06
 
 ### Added

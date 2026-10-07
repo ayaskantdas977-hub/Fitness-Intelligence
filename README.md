@@ -1,100 +1,100 @@
-# 🏋️‍♂️ Fitness Intelligence
+# Fitness Intelligence
 
-> **Your intelligent AI fitness coach that actually watches your workout form and calculates food calories down to the exact gram.**
+> Explainable training and nutrition platform with on-device motion tracking, transparent formulas, and audio cues.
 
 [![Live Demo](https://img.shields.io/badge/Demo-Live%20on%20GitHub%20Pages-FF6B1A?style=for-the-badge&logo=github)](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/)
 [![React 19](https://img.shields.io/badge/Frontend-React%2019%20%7C%20TypeScript%20%7C%20Vite-61DAFB?style=flat&logo=react)](https://react.dev/)
 [![Spring Boot](https://img.shields.io/badge/Backend-Spring%20Boot%203%20%7C%20Java%2017-6DB33F?style=flat&logo=springboot)](https://spring.io/projects/spring-boot)
 [![MediaPipe](https://img.shields.io/badge/Vision-Google%20MediaPipe%20Pose-4285F4?style=flat&logo=google)](https://developers.google.com/mediapipe)
-[![Tests Passing](https://img.shields.io/badge/Tests-59%2F59%20Passing-success?style=flat&logo=vitest)](https://vitest.dev/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Tests Passing](https://img.shields.io/badge/Tests-73%2F73%20Passing-success?style=flat&logo=vitest)](https://vitest.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-### 🌐 [Click here for Live Web Demo](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/)
+### Links & Live Demo
+- **Live Web Application**: [https://ayaskantdas977-hub.github.io/Fitness-Intelligence/](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/)
 - **Academy Courses**: [https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/courses](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/courses)
 - **Clinical Assessment & Research**: [https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/assessment](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/assessment)
-- **Documentation**: [System Architecture](docs/ARCHITECTURE.md) | [Changelog](CHANGELOG.md) | [Contributing](CONTRIBUTING.md)
+- **Voice Coach Studio**: [https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/voice-coach](https://ayaskantdas977-hub.github.io/Fitness-Intelligence/#/voice-coach)
+- **Documentation**: [System Architecture](docs/ARCHITECTURE.md) | [Polish Audit](docs/POLISH_AUDIT.md) | [Changelog](CHANGELOG.md) | [Contributing](CONTRIBUTING.md)
 
 ---
 
-## 💡 What is Fitness Intelligence?
+## What is Fitness Intelligence?
 
-Most fitness apps make you guess: you guess if your squat was deep enough, you guess how many calories were on your plate, and you wonder why your progress stalls. 
+Fitness Intelligence is an explainable sports science and nutrition platform designed to remove ambiguity from daily training. Using on-device computer vision, it tracks joint angles to provide immediate biomechanical feedback without uploading video to external servers. For nutrition, it links visual meal estimation with gram-level portion scaling anchored to reference food densities.
 
-**Fitness Intelligence** is a modern full-stack web platform built to remove the guesswork. Using your device's camera, it tracks your body joints in real time to tell you if your exercise form is right or wrong. For your meals, it combines photo scanning with **exact-gram calibrated nutrition**, so if you weigh 90g of chicken, you get exact numbers—no mathematical drift, no vague estimations.
-
-Best of all, it works **both completely offline in your browser** and connects seamlessly to a robust **Spring Boot (Java 17) cloud backend**.
+The platform functions completely in your browser via local adapters, while providing synchronized cloud persistence when connected to the Spring Boot backend.
 
 ---
 
-## ✨ Why It’s Different
+## What it does and current limits
 
-| Frustration with Normal Apps | How Fitness Intelligence Solves It |
-| :--- | :--- |
-| **"Am I doing this exercise right?"** | **Real-Time Camera AI**: Uses Google MediaPipe to track 33 joint landmarks. It counts your reps and instantly alerts you if your knees cave in or you don't hit proper depth. |
-| **"My calorie tracker gives weird numbers"** | **Zero-Drift Gram Precision**: Directly input exact grams (e.g., 90g) or use one-click scale recalibration. Anchored directly to immutable USDA reference data. |
-| **"Apps break when offline or without Wi-Fi"** | **Hybrid Architecture**: Uses a smart local adapter first. You can train and track completely offline, and sync with the Spring Boot server whenever you're connected. |
-| **"Generic AI tips that don't fit me"** | **Context-Aware AI Copilot**: A built-in coach that understands your workout history, injury limitations, and daily recovery score before recommending workouts. |
+### What it does
+- **On-device motion checking**: Tracks 33 body landmarks via MediaPipe Pose in browser memory, calculating depth, joint angles, and repetition completion for squats, push-ups, and curls.
+- **Calibrated macro tracking**: Computes calories and macronutrient ratios with gram-level scaling anchored to USDA FoodData Central reference values.
+- **Multilingual voice cues**: Synthesizes real-time audio corrections in Tamil (தமிழ்), Odia (ଓଡ଼ିଆ), Hindi, and English using the client-side Web Speech and Web Audio APIs.
+- **Safety-first split generation**: Incorporates clinical screening rules to recommend exercise splits that minimize spinal shear and joint impingement.
 
----
-
-## 🚀 Key Features
-
-### 1. 📹 AI Biomechanics Form Checker
-- **Live Webcam & Video Upload**: Practice live in front of your laptop/phone camera, or record a video at the gym and upload it for instant analysis.
-- **Joint Angle Calculation**: Tracks hip, knee, and elbow angles during Squats, Push-ups, and Bicep Curls.
-- **Smart Feedback Overlay**: Renders a dynamic, color-coded skeleton directly on the video:
-  - 🟢 **Green**: Perfect alignment and full range of motion.
-  - 🟡 **Amber / Red**: Form warning (e.g., knee valgus collapse, back arch, or partial rep).
-- **Repetition Counter**: Automatically tracks completed reps when you achieve full range of motion.
-
-### 2. 🥗 Food Scanner & Exact-Gram Calorie Precision
-- **Photo Recognition**: Take or upload a picture of your meal to identify foods and macronutrients.
-- **Exact-Gram Calorie Recalibration**: Unlike apps that round portions in steps of 25g or 50g, you can type **exact weights (e.g., 90g, 135g)** or use quick-adjust chips (`[50g, 90g, 100g, 150g, 200g]`).
-- **Macro Breakdown**: Instant breakdown of Calories, Protein, Carbs, and Fats.
-
-### 3. 💬 Interactive AI Coach & Copilot
-- Ask anything from *"Can I do leg presses with knee pain?"* to *"How much protein is in 90 gm chicken breast?"*.
-- Real-time conversational streaming with actionable exercise and diet advice.
-
-### 4. 📊 Daily Readiness & Progress Tracking
-- Check-in daily with sleep quality, energy levels, and muscle soreness.
-- Automatically scales your recommended workout intensity based on your recovery score.
-
-### 5. 🎓 Udemy-Style Fitness Academy & Courses
-- **Beginner-Friendly Masterclasses**: Guided curricula covering gym onboarding, spine-safe biomechanics, and nutrition.
-- **Certified Clinicians & Trainers**: Courses led by CSCS, DPT, and Registered Dietitians with verified ratings (4.7★ - 4.9★).
-- **Direct 1-on-1 Contact**: Pre-configured WhatsApp instant inquiry hotline and instructor email access.
-- **Budget Pricing Filters**: Built-in pricing slider with dedicated *Around ₹1,500* value tiers.
-
-### 6. 🔬 Live 2026 Clinical Research Matrix
-- **Evidence-Based Biomechanics**: Real-time comparisons between historic dogma and 2024–2026 clinical RCTs (BJSM, ACSM 11th Ed., JOSPT).
-- **Segmented Beat Card UI**: Visual progress indicators and primary journal citations.
-- **Quantified Protection**: Documented biomechanical deltas (-82% lumbar shear, -61% patellar compressive stress).
+### Current limits
+- **Camera framing**: Video tracking requires a clear, single-person full-body view; multi-person backgrounds or heavy occlusion can degrade landmark visibility.
+- **Exercise models**: Real-time state machines currently cover Squats, Push-ups, and Biceps Curls; other exercises use audio cues and timer guidance.
+- **Visual estimation**: Photo food scanning provides initial volumetric estimates; dense mixed curries or layered meals require manual gram confirmation for exact tracking.
 
 ---
 
-## 🛠️ Tech Stack
+## Key features
+
+### 1. Movement form checker
+- Live webcam and video upload analysis running completely client-side.
+- Joint angle state machines for hip, knee, and elbow kinematics.
+- Color-coded feedback overlays:
+  - Green: Proper joint alignment and full range of motion.
+  - Amber / Red: Technique warnings (knee valgus collapse, excessive forward lean, sub-parallel depth).
+- Repetition counter based on verified kinematic transitions.
+
+### 2. Nutrition and meal diary
+- Visual meal recognition and search database covering standard and Indian staples.
+- Gram-level portion adjustment anchored to reference densities.
+- Transparent macro breakdown for energy, protein, carbohydrate, and fat intake.
+
+### 3. Voice coach and audio studio
+- Real-time cadence metronome and voice cue playback for hands-free training.
+- Native pronunciations in Tamil, Odia, Hindi, and English.
+- Exercise library with 60 movement setups and safety cues.
+
+### 4. Training academy and courses
+- Structured training masterclasses covering safe exercise progression and nutrition fundamentals.
+- Mentorship programs led by certified instructors (CSCS, DPT, RD).
+- Transparent pricing tiers and direct instructor consultation channels.
+
+### 5. Clinical research matrix
+- Evidence comparisons highlighting contemporary 2024–2026 sports medicine standards against historic guidelines.
+- Primary literature citations from BJSM, ACSM, and JOSPT.
+- Sample metrics comparing axial spinal load and joint contact pressures.
+
+---
+
+## Tech stack
 
 ### Frontend
-- **Framework**: React 18 with TypeScript & Vite
-- **Styling**: Tailwind CSS & Modern Sports-Tech Dark Theme
+- **Framework**: React 19 with TypeScript & Vite
+- **Styling**: Tailwind CSS with dark theme tokens (#0F0B09 baseline)
 - **Computer Vision**: Google MediaPipe Pose Landmarker (`@mediapipe/tasks-vision`)
-- **Visuals & 3D**: HTML5 Canvas overlays & Three.js animations
+- **Audio & Visuals**: Web Speech API, Web Audio API, HTML5 Canvas
 - **Icons**: Lucide React
 
 ### Backend
 - **Framework**: Java 17 + Spring Boot 3
-- **ORM & Data**: Spring Data JPA + H2 In-Memory Database (PostgreSQL-ready)
-- **Architecture**: Clean RESTful Controllers + Domain Service Layer
-- **Testing**: JUnit 5 + MockMvc automated test suite
+- **Data**: Spring Data JPA + H2 In-Memory Database (PostgreSQL-compatible)
+- **Architecture**: RESTful Controllers with domain service layer
+- **Testing**: JUnit 5 + MockMvc test suite
 
 ---
 
-## ⚡ Quick Start
+## Quick start
 
-### 1. Run the Frontend (React + Vite)
+### 1. Run the frontend (React + Vite)
 ```bash
 # Clone the repository
 git clone https://github.com/ayaskantdas977-hub/Fitness-Intelligence.git
@@ -110,7 +110,7 @@ Open **[http://localhost:5173](http://localhost:5173)** in your browser.
 
 ---
 
-### 2. Run the Backend (Spring Boot 3)
+### 2. Run the backend (Spring Boot 3)
 ```bash
 cd backend
 
@@ -120,42 +120,43 @@ mvn test
 # Start the Spring Boot REST API
 mvn spring-boot:run
 ```
-The backend starts on **[http://localhost:8080](http://localhost:8080)**.  
-The frontend will automatically detect the live server and display a green **"Spring Boot Connected"** status badge!
+The backend starts on **[http://localhost:8080](http://localhost:8080)**. The frontend automatically detects the live server and displays the connection badge.
 
 ---
 
-## 📁 Project Structure
+## Project structure
 
 ```
 fitness-intelligence/
 ├── src/
-│   ├── components/       # UI cards, modals, AI drawer, form visualizer
-│   │   ├── ai/           # AI Copilot drawer & knowledge base
-│   │   ├── ui/           # Design system buttons, food cards, badges
-│   │   └── hero/         # Interactive 3D graphics & visual elements
-│   ├── pages/            # Form Checker, Nutrition, Workouts, Profile, Dashboard
-│   ├── lib/              # MediaPipe Pose calculations & joint geometry
-│   ├── services/         # Dual-adapter layer (Local Storage + Spring Boot API)
-│   └── engine/           # Deterministic health formulas (BMR, TDEE, Readiness)
+│   ├── components/       # Design system components, modals, audio HUD
+│   │   ├── ai/           # Copilot drawer & prompt handlers
+│   │   ├── audio/        # Voice coach HUD & metronome
+│   │   ├── layout/       # AppShell and navigation
+│   │   └── ui/           # Buttons, cards, food result views
+│   ├── pages/            # Form Checker, Nutrition, Workouts, Courses, Dashboard
+│   ├── lib/              # Pose analysis state machines & kinematics
+│   ├── services/         # Dual-adapter layer (Local storage + Spring Boot API)
+│   └── data/             # Course catalog & research matrix baselines
 │
-├── backend/              # Spring Boot 3 Application
+├── backend/              # Spring Boot 3 application
 │   └── src/
-│       ├── main/java/    # REST Controllers, JPA Entities, DTOs & Services
-│       └── test/java/    # Automated JUnit tests for AI & Biomechanics
+│       ├── main/java/    # REST controllers, entities, services
+│       └── test/java/    # Automated JUnit test suite
 │
-└── package.json          # Frontend scripts and dependencies
+├── docs/                 # Documentation, audit logs, and color baseline
+└── package.json          # Frontend dependencies and scripts
 ```
 
 ---
 
-## 💡 Troubleshooting Tips
+## Troubleshooting tips
 
-- **Camera blocked or shows a slash icon (`📷🚫`)?**  
-  Check if your laptop has a physical sliding privacy shutter over the webcam lens, or press your keyboard camera toggle key (usually `Fn + F10` or `Fn + F6`). Also ensure camera permissions are allowed in Windows Settings (*Privacy & security > Camera*).
+- **Webcam permission blocked**:  
+  Ensure camera permissions are enabled in your browser settings for `localhost`. Check that your device does not have a physical webcam privacy shutter engaged.
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
