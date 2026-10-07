@@ -10,6 +10,7 @@ import {
   LogOut,
   Zap,
   GraduationCap,
+  Headphones,
 } from 'lucide-react';
 import { OfflineBanner } from '../ui/OfflineBanner';
 import { WhyDrawer } from '../drawers/WhyDrawer';
@@ -37,6 +38,7 @@ export const AppShell: React.FC = () => {
     { to: '/dashboard', label: 'Home', icon: LayoutDashboard },
     { to: '/workout', label: 'Workout', icon: Dumbbell },
     { to: '/form-checker', label: 'Form AI', icon: Scan },
+    { to: '/voice-coach', label: 'Voice Coach', icon: Headphones },
     { to: '/courses', label: 'Courses', icon: GraduationCap },
     { to: '/nutrition', label: 'Nutrition', icon: UtensilsCrossed },
     { to: '/progress', label: 'Progress', icon: LineChart },
@@ -48,7 +50,8 @@ export const AppShell: React.FC = () => {
     location.pathname.startsWith('/onboarding') ||
     location.pathname === '/login' ||
     location.pathname === '/assessment' ||
-    location.pathname === '/courses';
+    location.pathname === '/courses' ||
+    location.pathname === '/voice-coach';
 
   const currentUser = services.auth.getCurrentUser();
   const isAuthenticated = !!(

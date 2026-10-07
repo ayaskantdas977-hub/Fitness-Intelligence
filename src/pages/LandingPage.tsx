@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, X, Zap, GraduationCap } from 'lucide-react';
+import { ArrowRight, Sparkles, X, Zap, GraduationCap, Headphones } from 'lucide-react';
 import { HeroMedia } from '../components/hero/HeroMedia';
 import { HeroWall } from '../components/landing/HeroWall';
 import { HeroArc } from '../components/landing/HeroArc';
@@ -125,6 +125,13 @@ export const LandingPage: React.FC = () => {
             >
               <GraduationCap className="w-3.5 h-3.5 text-[#FF6B1A]" />
               Courses
+            </Link>
+            <Link
+              to="/voice-coach"
+              className="hover:text-[var(--text)] transition-colors cursor-pointer flex items-center gap-1"
+            >
+              <Headphones className="w-3.5 h-3.5 text-[#FF6B1A]" />
+              Voice Coach
             </Link>
             <a href="#story-scene" className="hover:text-[var(--text)] transition-colors">
               Principles
