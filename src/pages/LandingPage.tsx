@@ -81,7 +81,13 @@ export const LandingPage: React.FC = () => {
       {!announcementDismissed && (
         <div className="bg-[#FF6B1A] text-[#0F0B09] px-4 py-2 text-xs font-bold flex items-center justify-between tracking-tight sticky top-0 z-40">
           <div className="max-w-7xl mx-auto flex items-center justify-center flex-1 text-center">
-            <span>New: form checker runs on your device. Nothing is uploaded.</span>
+            <Link
+              to="/form-checker"
+              className="hover:underline flex items-center justify-center gap-1.5 cursor-pointer text-[#0F0B09]"
+            >
+              <span>New: form checker runs on your device. Nothing is uploaded.</span>
+              <ArrowRight className="w-3.5 h-3.5 inline" />
+            </Link>
           </div>
           <button
             type="button"
@@ -220,10 +226,10 @@ export const LandingPage: React.FC = () => {
         {/* Content Anchored Bottom-Left */}
         <div className="relative z-10 flex flex-col items-start text-left max-w-7xl mx-auto w-full mt-auto">
 
-          {/* Headline on two lines: weight 300, tracking -0.04em, size clamp(56px, 11vw, 168px), line-height 0.95 */}
+          {/* Headline on two lines: weight 300, tracking -0.04em, mobile-responsive size clamp(38px, 10vw, 168px), line-height 0.95 */}
           <h1
             style={{
-              fontSize: 'clamp(56px, 11vw, 168px)',
+              fontSize: 'clamp(38px, 10vw, 168px)',
               lineHeight: 0.95,
               letterSpacing: '-0.04em',
             }}

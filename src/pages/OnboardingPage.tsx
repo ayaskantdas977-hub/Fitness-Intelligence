@@ -586,7 +586,7 @@ export const OnboardingPage: React.FC = () => {
                 <span>Biological Sex (For MSJ Metabolic Offset)</span>
                 <span className="text-[11px] text-[#FF6B1A] font-semibold">Required</span>
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {[
                   { id: 'male', label: 'Male (+5 offset)' },
                   { id: 'female', label: 'Female (-161 offset)' },

@@ -45,13 +45,22 @@ export const AppShell: React.FC = () => {
     { to: '/profile', label: 'Profile', icon: User },
   ];
 
+  const publicNavItems = [
+    { to: '/', label: 'Home', icon: LayoutDashboard },
+    { to: '/form-checker', label: 'Form AI', icon: Scan },
+    { to: '/voice-coach', label: 'Voice Coach', icon: Headphones },
+    { to: '/courses', label: 'Courses', icon: GraduationCap },
+    { to: '/login', label: 'Sign In', icon: User },
+  ];
+
   const isPublicPage =
     location.pathname === '/' ||
     location.pathname.startsWith('/onboarding') ||
     location.pathname === '/login' ||
     location.pathname === '/assessment' ||
     location.pathname === '/courses' ||
-    location.pathname === '/voice-coach';
+    location.pathname === '/voice-coach' ||
+    location.pathname === '/form-checker';
 
   const currentUser = services.auth.getCurrentUser();
   const isAuthenticated = !!(
@@ -69,6 +78,7 @@ export const AppShell: React.FC = () => {
   }, [isPublicPage, isAuthenticated, navigate, showToast]);
 
   if (isPublicPage) {
+    const showPublicBottomNav = !location.pathname.startsWith('/onboarding') && location.pathname !== '/login';
     return (
       <div className="min-h-screen app-atmosphere text-[var(--text)] flex flex-col relative selection:bg-[#FF6B1A] selection:text-[#0F0B09]">
         <div className="grain-overlay" aria-hidden="true" />
@@ -76,9 +86,37 @@ export const AppShell: React.FC = () => {
         <WhyDrawer />
         <CookieConsent />
         <AICopilotDrawer />
-        <main className="flex-1 relative z-10">
+        <main className={`flex-1 relative z-10 ${showPublicBottomNav ? 'pb-20 md:pb-0' : ''}`}>
           <Outlet />
         </main>
+        {showPublicBottomNav && (
+          <nav
+            className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-[var(--surface)]/95 backdrop-blur-md border-t border-[var(--border)] px-1 py-1 flex items-center justify-around overflow-x-auto scrollbar-none"
+            aria-label="Mobile Navigation"
+          >
+            {publicNavItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={({ isActive }) =>
+                    `flex flex-col items-center justify-center px-1.5 py-1 rounded-lg min-w-[40px] min-h-[44px] transition-colors shrink-0 ${
+                      isActive
+                        ? 'text-[#FF6B1A] font-bold'
+                        : 'text-[var(--muted)] hover:text-[var(--text)]'
+                    }`
+                  }
+                >
+                  <Icon className="w-4 h-4" />
+                  <span className="text-[9px] tracking-tight mt-0.5 font-medium">
+                    {item.label}
+                  </span>
+                </NavLink>
+              );
+            })}
+          </nav>
+        )}
       </div>
     );
   }

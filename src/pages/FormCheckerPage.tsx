@@ -62,6 +62,7 @@ export const FormCheckerPage: React.FC = () => {
 
   // Camera & Photo & AI states
   const [isCameraMode, setIsCameraMode] = useState<boolean>(false);
+  const [cameraFacing, setCameraFacing] = useState<'user' | 'environment'>('user');
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isAuditingWithGemini, setIsAuditingWithGemini] = useState<boolean>(false);
   const [geminiAuditResult, setGeminiAuditResult] = useState<{
@@ -93,6 +94,7 @@ export const FormCheckerPage: React.FC = () => {
   const landmarkerRef = useRef<any>(null);
   const stateMachineRef = useRef<SquatStateMachine | PushUpStateMachine | BicepsCurlStateMachine | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+  const lastFrameTimeRef = useRef<number>(0);
 
   // Reset trackers when exercise changes
   useEffect(() => {
@@ -186,6 +188,9 @@ export const FormCheckerPage: React.FC = () => {
       if (video.srcObject !== mediaStreamRef.current) {
         video.srcObject = mediaStreamRef.current;
       }
+      video.muted = true;
+      video.setAttribute('playsinline', 'true');
+      video.setAttribute('webkit-playsinline', 'true');
       const handlePlay = () => {
         video
           .play()
@@ -203,7 +208,7 @@ export const FormCheckerPage: React.FC = () => {
     }
   }, [isCameraMode, videoSrc]);
 
-  const startCamera = async () => {
+  const startCamera = async (targetFacing: 'user' | 'environment' = cameraFacing) => {
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         showToast('Camera API not available in this browser environment.', 'error');
@@ -217,7 +222,7 @@ export const FormCheckerPage: React.FC = () => {
           video: {
             width: { ideal: 640 },
             height: { ideal: 480 },
-            facingMode: 'user',
+            facingMode: targetFacing,
           },
           audio: false,
         });
@@ -240,6 +245,9 @@ export const FormCheckerPage: React.FC = () => {
       const video = videoRef.current;
       if (video) {
         video.srcObject = stream;
+        video.muted = true;
+        video.setAttribute('playsinline', 'true');
+        video.setAttribute('webkit-playsinline', 'true');
         video.onloadedmetadata = () => {
           video.play().then(() => {
             setIsProcessing(true);
@@ -254,7 +262,7 @@ export const FormCheckerPage: React.FC = () => {
         }
       }
 
-      showToast('Live Camera active. Stand back to capture your full body.', 'info');
+      showToast(`Live Camera active (${targetFacing === 'user' ? 'Front' : 'Rear'}). Stand back to capture your full body.`, 'info');
 
       // Asynchronously load MediaPipe in background without blocking video
       if (!landmarkerRef.current) {
@@ -276,6 +284,15 @@ export const FormCheckerPage: React.FC = () => {
     }
   };
 
+  const toggleCameraFacing = async () => {
+    const nextFacing = cameraFacing === 'user' ? 'environment' : 'user';
+    setCameraFacing(nextFacing);
+    stopCamera();
+    setTimeout(() => {
+      startCamera(nextFacing);
+    }, 150);
+  };
+
   const processLiveCameraFrames = () => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -291,15 +308,24 @@ export const FormCheckerPage: React.FC = () => {
         return;
       }
 
-      if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
+      if (video.videoWidth && video.videoHeight) {
+        if (canvas.width !== video.videoWidth || canvas.height !== video.videoHeight) {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+        }
       }
 
       const activeLandmarker = landmarkerRef.current;
       if (activeLandmarker) {
         try {
-          const results = activeLandmarker.detectForVideo(video, performance.now());
+          const now = performance.now();
+          if (now <= lastFrameTimeRef.current) {
+            animationFrameRef.current = requestAnimationFrame(renderLoop);
+            return;
+          }
+          lastFrameTimeRef.current = now;
+
+          const results = activeLandmarker.detectForVideo(video, now);
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           if (results.landmarks && results.landmarks.length > 0) {
@@ -770,7 +796,7 @@ export const FormCheckerPage: React.FC = () => {
           >
             {/* Real Video, Live Camera, Photo or Simulation Canvas */}
             {videoSrc ? (
-              <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black flex items-center justify-center">
+              <div className="relative w-full aspect-[4/3] sm:aspect-video rounded-xl overflow-hidden bg-black flex items-center justify-center">
                 {videoSrc === 'photo' && photoPreview ? (
                   <img
                     src={photoPreview}
@@ -789,6 +815,9 @@ export const FormCheckerPage: React.FC = () => {
                           el.srcObject !== mediaStreamRef.current
                         ) {
                           el.srcObject = mediaStreamRef.current;
+                          el.muted = true;
+                          el.setAttribute('playsinline', 'true');
+                          el.setAttribute('webkit-playsinline', 'true');
                           el.play()
                             .then(() => {
                               setIsProcessing(true);
@@ -894,7 +923,7 @@ export const FormCheckerPage: React.FC = () => {
                   <Button
                     variant="primary"
                     size="md"
-                    onClick={startCamera}
+                    onClick={() => startCamera()}
                     className="flex items-center justify-center gap-2 cursor-pointer bg-gradient-to-r from-[#FF6B1A] to-[#FF8A3D] text-white font-bold shadow-lg shadow-[#FF6B1A]/20 hover:scale-[1.02] transition-transform"
                   >
                     <Camera className="w-4 h-4" />
@@ -1039,15 +1068,27 @@ export const FormCheckerPage: React.FC = () => {
                   </Button>
 
                   {isCameraMode && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={stopCamera}
-                      className="flex-1 flex items-center justify-center gap-1.5 text-xs text-rose-500 border-rose-500/30 hover:bg-rose-500/10"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                      <span>Stop camera</span>
-                    </Button>
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={toggleCameraFacing}
+                        className="flex-1 flex items-center justify-center gap-1.5 text-xs text-[#FF6B1A] border-[#FF6B1A]/30 hover:bg-[#FF6B1A]/10"
+                        title="Switch between front and rear camera"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>Flip ({cameraFacing === 'user' ? 'Front' : 'Rear'})</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={stopCamera}
+                        className="flex-1 flex items-center justify-center gap-1.5 text-xs text-rose-500 border-rose-500/30 hover:bg-rose-500/10"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                        <span>Stop camera</span>
+                      </Button>
+                    </>
                   )}
                 </div>
               </div>
